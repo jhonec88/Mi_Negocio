@@ -6,20 +6,26 @@ Sitio web comercial y catálogo digital interactivo desarrollado exclusivamente 
 
 ## 🚀 Características Principales
 
-1. **Rutas Comerciales Duales**:
+1. **Carrito de Compras Interactivo**:
+   - Botón de carrito con contador dinámico (badge animado) accesible desde la cabecera en todas las páginas.
+   - Panel lateral deslizable (*Slide-Over Drawer*) con listado de productos acumulados.
+   - Controles de cantidad (+ / -), botón de eliminación individual y opción de vaciar carrito.
+   - Persistencia automática en `localStorage` (los productos agregados se conservan al navegar entre páginas).
+   - Generación de mensaje estructurado para **finalizar y enviar el pedido consolidado directamente a WhatsApp**.
+2. **Rutas Comerciales Duales**:
    - **Ruta 1 (Reparación):** Solicitud rápida de diagnóstico, mantenimiento preventivo y reparación de portátiles y PCs.
    - **Ruta 2 (Tienda):** Catálogo de productos tecnológicos con precios en Pesos Colombianos (COP), filtros, ordenamiento y ficha técnica.
-2. **Herramientas Diferenciales Interactivas**:
+3. **Herramientas Diferenciales Interactivas**:
    - **Diagnóstico Orientativo:** Asistente interactivo "¿Qué problema tiene tu computador?" con orientación previa y solución sugerida.
    - **Slider Antes y Después:** Comparador visual interactivo de mantenimiento térmico y limpieza de hardware.
    - **Recomendador de Actualizaciones:** Calculadora orientativa de combinaciones SSD/RAM según tipo de equipo y uso.
-3. **Integración con WhatsApp**:
+4. **Integración con WhatsApp**:
    - Generación de enlaces contextuales con mensajes preparados y codificados (`https://wa.me/57...`).
    - Botón flotante accesible en todas las páginas.
-4. **Formulario Asistido y Validado**:
+5. **Formulario Asistido y Validado**:
    - Validación accesible en tiempo real (nombre, teléfono de 10 dígitos, email opcional, tipo de solicitud, mensaje y aceptación de la Ley 1581 de protección de datos).
    - Modal de transparencia que prepara la solicitud para enviarla vía WhatsApp.
-5. **Accesibilidad y Rendimiento**:
+6. **Accesibilidad y Rendimiento**:
    - Cumplimiento de criterios aplicables de **WCAG 2.2 AA** (contraste cromático, navegación por teclado, enlaces de salto, trampa de foco en modales y respeto a `prefers-reduced-motion`).
    - Diseño **Mobile-First** 100% responsivo para móviles, tabletas y computadores.
    - Tema Claro y Tema Oscuro seleccionable con persistencia en `localStorage`.
@@ -42,14 +48,15 @@ MINEGOCIO/
 │   │   ├── variables.css          # Paleta oficial, tipografía y tokens de diseño
 │   │   ├── reset.css              # Reset moderno y accesible
 │   │   ├── global.css             # Clases globales, utilidades y tipografía
-│   │   ├── components.css         # Tarjetas, modales, botones, formularios y acordeones
+│   │   ├── components.css         # Tarjetas, modales, botones, formularios, drawer y badges
 │   │   └── responsive.css         # Media queries y menú móvil drawer
 │   │
 │   ├── js/
+│   │   ├── carrito.js             # Lógica del carrito de compras, persistencia y checkout WhatsApp
 │   │   ├── whatsapp.js            # Configuración de número comercial y mensajes contextuales
 │   │   ├── modal.js               # Gestor accesible de ventanas modales (WCAG 2.2 AA)
 │   │   ├── productos-data.js      # Base de datos local de 16 productos con precios en COP
-│   │   ├── productos.js           # Renderizado dinámico y ficha técnica en modal
+│   │   ├── productos.js           # Renderizado dinámico, botones + Carrito y ficha técnica
 │   │   ├── filtros.js             # Búsqueda, filtrado multicriterio y ordenamiento nativo
 │   │   ├── servicios.js           # Datos de 12 servicios y diagnóstico orientativo
 │   │   ├── formulario.js          # Validación accesible de formulario de contacto

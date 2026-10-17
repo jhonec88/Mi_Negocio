@@ -89,9 +89,13 @@ function renderizarProductos(productos, contenedorId) {
           <button type="button" class="btn btn-outline btn-sm" onclick="mostrarDetalleProducto(${p.id})">
             Ver detalles
           </button>
-          <button type="button" class="btn btn-whatsapp btn-sm" onclick="consultarProductoWhatsApp('${p.nombre}', '${formatearPrecioCOP(p.precio)}', '${p.marca}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            Consultar
+          <button type="button" class="btn btn-primary btn-sm" onclick="agregarAlCarrito(${p.id})" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''} aria-label="Agregar ${p.nombre} al carrito de compras">
+            <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            ${p.disponible === 'agotado' ? 'Agotado' : '+ Carrito'}
           </button>
         </div>
       </div>
@@ -158,9 +162,17 @@ function mostrarDetalleProducto(idProducto) {
 
   const footerHtml = `
     <button type="button" class="btn btn-outline" onclick="cerrarModal()">Cerrar</button>
+    <button type="button" class="btn btn-primary" onclick="agregarAlCarrito(${p.id}); cerrarModal();" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}>
+      <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      Agregar al carrito
+    </button>
     <button type="button" class="btn btn-whatsapp" onclick="consultarProductoWhatsApp('${p.nombre}', '${precioFormateado}', '${p.marca}'); cerrarModal();">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-      Consultar disponibilidad en WhatsApp
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+      Consultar en WhatsApp
     </button>
   `;
 
