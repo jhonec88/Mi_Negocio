@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <rect width="400" height="300" rx="16" fill="#F8FAFC" />
+  <!-- Pantalla 24" -->
+  <rect x="70" y="45" width="260" height="155" rx="6" fill="#0F172A" stroke="#334155" stroke-width="3" />
+  <rect x="78" y="53" width="244" height="139" rx="2" fill="#1E293B" />
+  <text x="200" y="115" font-family="system-ui, sans-serif" font-size="26" font-weight="900" fill="#2563EB" text-anchor="middle">144 Hz</text>
+  <text x="200" y="145" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#06B6D4" text-anchor="middle">1ms IPS â€¢ UltraGear</text>
+  <!-- Soporte en V -->
+  <polygon points="190,200 210,200 205,240 195,240" fill="#334155" />
+  <polygon points="140,250 260,250 200,235" fill="#0F172A" stroke="#DC2626" stroke-width="1.5" />
+  <text x="200" y="280" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle">LG UltraGear 24" Gaming</text>
+</svg>

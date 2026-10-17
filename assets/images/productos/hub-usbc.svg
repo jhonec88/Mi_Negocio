@@ -1,0 +1,13 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <rect width="400" height="300" rx="16" fill="#F8FAFC" />
+  <!-- Hub metalico UGreen -->
+  <rect x="130" y="90" width="140" height="70" rx="8" fill="#475569" stroke="#334155" stroke-width="2" />
+  <!-- Puertos -->
+  <rect x="145" y="115" width="30" height="16" rx="2" fill="#0284C7" />
+  <rect x="185" y="115" width="35" height="16" rx="2" fill="#1E293B" />
+  <rect x="230" y="120" width="24" height="8" rx="2" fill="#0F172A" />
+  <!-- Cable USB-C -->
+  <path d="M130,125 L70,125" stroke="#334155" stroke-width="8" stroke-linecap="round" />
+  <rect x="50" y="119" width="20" height="12" rx="3" fill="#94A3B8" />
+  <text x="200" y="225" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle">Adaptador USB-C a HDMI 4K + USB 3.0</text>
+</svg>

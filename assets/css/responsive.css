@@ -1,0 +1,230 @@
+/* ==========================================================================
+   DISEÑO RESPONSIVO (RESPONSIVE DESIGN)
+   Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PORTÁTILES Y TABLETAS EN HORIZONTAL (Hasta 1023px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  :root {
+    --font-size-h1: 2.5rem;   /* 40px */
+    --font-size-h2: 2rem;     /* 32px */
+    --font-size-h3: 1.35rem;  /* 22px */
+  }
+
+  /* Grilla de productos a 2 columnas */
+  .productos-grid,
+  .servicios-grid,
+  .grid-4,
+  .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: var(--spacing-5);
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-8);
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-8);
+    text-align: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETAS Y DISPOSITIVOS MÓVILES (Hasta 767px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    /* Jerarquía móvil estricta según sección 3 y 5 */
+    --font-size-h1: 2rem;      /* 32px */
+    --font-size-h2: 1.625rem;  /* 26px */
+    --font-size-h3: 1.25rem;   /* 20px */
+    --font-size-body: 1rem;    /* 16px */
+    --container-padding: 1rem;
+    --header-height: 68px;
+  }
+
+  /* Menú de navegación móvil con cajón deslizable */
+  .menu-toggle-btn {
+    display: inline-flex;
+  }
+
+  .main-nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    background-color: var(--color-bg-primary);
+    border-top: 1px solid var(--color-border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--spacing-6);
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-xl);
+    z-index: var(--z-sticky);
+  }
+
+  .main-nav.is-open {
+    transform: translateX(0);
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-2);
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 0.85rem 1rem;
+    font-size: 1.1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .nav-link.active::after {
+    display: none;
+  }
+
+  .nav-link.active {
+    background-color: var(--color-primary-light);
+  }
+
+  .header-actions .btn-whatsapp-header {
+    display: none;
+  }
+
+  /* Columnas colapsadas a 1 columna */
+  .productos-grid,
+  .servicios-grid,
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    text-align: center;
+  }
+
+  /* Modales en móvil a pantalla casi completa */
+  .modal-container {
+    max-height: 95vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    padding: var(--spacing-4);
+  }
+
+  .modal-body {
+    padding: var(--spacing-4);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-4);
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  /* Botones de acción en tarjetas */
+  .service-actions,
+  .product-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  /* Botón de WhatsApp flotante más ajustado */
+  .whatsapp-float {
+    bottom: var(--spacing-4);
+    right: var(--spacing-4);
+    width: 52px;
+    height: 52px;
+  }
+
+  .whatsapp-float svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .whatsapp-tooltip {
+    display: none;
+  }
+
+  .back-to-top {
+    bottom: var(--spacing-4);
+    left: var(--spacing-4);
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Formularios a ancho completo */
+  .form-group {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px; /* Evita zoom automático en Safari iOS */
+  }
+
+  .tool-box {
+    padding: var(--spacing-4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MÓVILES PEQUEÑOS (320px a 374px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 374px) {
+  :root {
+    --font-size-h1: 1.75rem; /* 28px */
+    --container-padding: 0.75rem;
+  }
+
+  .brand-title {
+    font-size: 1.1rem;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ESCRITORIOS GRANDES (1440px o más)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  .productos-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

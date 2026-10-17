@@ -1,0 +1,13 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <rect width="400" height="300" rx="16" fill="#F8FAFC" />
+  <!-- Disipador Negro Kingston Fury -->
+  <polygon points="50,110 350,110 345,185 55,185" fill="#0F172A" stroke="#2563EB" stroke-width="2" />
+  <polygon points="60,110 110,95 290,95 340,110" fill="#1E293B" />
+  <text x="200" y="150" font-family="system-ui, sans-serif" font-size="20" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">FURY BEAST</text>
+  <text x="200" y="172" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#06B6D4" text-anchor="middle">DDR4 3200MHz â€¢ 8 GB</text>
+  <!-- Pines Dorados DIMM -->
+  <rect x="58" y="185" width="284" height="15" fill="#1E293B" />
+  <rect x="62" y="188" width="125" height="10" fill="#F59E0B" />
+  <rect x="202" y="188" width="136" height="10" fill="#F59E0B" />
+  <rect x="187" y="186" width="15" height="14" fill="#F8FAFC" />
+</svg>

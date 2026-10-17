@@ -1,0 +1,27 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ssdMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="16" fill="#F8FAFC" />
+  <!-- Chasis SSD 2.5 -->
+  <rect x="90" y="50" width="220" height="200" rx="12" fill="url(#ssdMetal)" stroke="#475569" stroke-width="2" />
+  <circle cx="105" cy="65" r="4" fill="#64748B" />
+  <circle cx="295" cy="65" r="4" fill="#64748B" />
+  <circle cx="105" cy="235" r="4" fill="#64748B" />
+  <circle cx="295" cy="235" r="4" fill="#64748B" />
+  <!-- Etiqueta Kingston -->
+  <rect x="115" y="80" width="170" height="130" rx="6" fill="#1E293B" stroke="#2563EB" stroke-width="1.5" />
+  <rect x="130" y="100" width="40" height="8" rx="2" fill="#DC2626" />
+  <text x="130" y="130" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="#FFFFFF">Kingston</text>
+  <text x="130" y="152" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#06B6D4">A400 SSD</text>
+  <text x="130" y="185" font-family="system-ui, sans-serif" font-size="22" font-weight="800" fill="#2563EB">480 GB</text>
+  <text x="265" y="185" font-family="system-ui, sans-serif" font-size="11" fill="#94A3B8" text-anchor="end">SATA III 6Gb/s</text>
+  <!-- Conector SATA -->
+  <rect x="160" y="250" width="80" height="12" rx="2" fill="#E2E8F0" />
+  <line x1="170" y1="250" x2="170" y2="262" stroke="#94A3B8" stroke-width="2" />
+  <line x1="180" y1="250" x2="180" y2="262" stroke="#94A3B8" stroke-width="2" />
+  <line x1="190" y1="250" x2="190" y2="262" stroke="#94A3B8" stroke-width="2" />
+</svg>

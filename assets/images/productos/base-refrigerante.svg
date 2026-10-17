@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <rect width="400" height="300" rx="16" fill="#F8FAFC" />
+  <!-- Base inclinada con ventiladores LED -->
+  <polygon points="70,70 330,70 300,200 100,200" fill="#0F172A" stroke="#2563EB" stroke-width="2" />
+  <!-- 6 ventiladores circulares -->
+  <circle cx="150" cy="110" r="22" fill="#1E293B" stroke="#06B6D4" stroke-width="2" />
+  <circle cx="200" cy="110" r="22" fill="#1E293B" stroke="#06B6D4" stroke-width="2" />
+  <circle cx="250" cy="110" r="22" fill="#1E293B" stroke="#06B6D4" stroke-width="2" />
+  <circle cx="160" cy="165" r="20" fill="#1E293B" stroke="#06B6D4" stroke-width="2" />
+  <circle cx="240" cy="165" r="20" fill="#1E293B" stroke="#06B6D4" stroke-width="2" />
+  <text x="200" y="245" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="middle">Base Refrigerante 6 Ventiladores LED</text>
+</svg>
