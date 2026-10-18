@@ -1018,22 +1018,75 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-whatsapp);
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
   z-index: var(--z-floating);
   transition: all var(--transition-normal);
   cursor: pointer;
   text-decoration: none;
+  animation: whatsappPulse 2.2s infinite ease-in-out;
+}
+
+.whatsapp-float::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-whatsapp);
+  z-index: -1;
+  animation: whatsappRing 2.2s infinite cubic-bezier(0.24, 0, 0.38, 1);
+  pointer-events: none;
+}
+
+@keyframes whatsappPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
+  }
+}
+
+@keyframes whatsappRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
 }
 
 .whatsapp-float:hover {
   background-color: var(--color-whatsapp-hover);
-  transform: scale(1.08) translateY(-4px);
+  transform: scale(1.14) translateY(-3px);
   color: #ffffff;
+  box-shadow: 0 10px 32px rgba(37, 211, 102, 0.75);
+  animation-play-state: paused;
+}
+
+.whatsapp-float:hover::before {
+  opacity: 0;
+  animation-play-state: paused;
 }
 
 .whatsapp-float svg {
   width: 34px;
   height: 34px;
+  fill: currentColor;
+}
+
+.btn-whatsapp svg {
+  fill: currentColor;
 }
 
 /* Tooltip badge de WhatsApp */

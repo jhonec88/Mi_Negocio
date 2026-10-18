@@ -13,7 +13,7 @@ const PRODUCTOS_DATA = [
     categoria: "SSD y almacenamiento",
     precio: 145000,
     disponible: "disponible", // "disponible" | "agotado" | "consultar"
-    imagen: "assets/images/productos/ssd-kingston.svg",
+    imagen: "assets/images/productos/ssd-kingston.jpg",
     descripcion: "Unidad de estado sólido de alta velocidad para revivir y acelerar portátiles y equipos de escritorio.",
     destacado: true,
     especificaciones: {
@@ -32,7 +32,7 @@ const PRODUCTOS_DATA = [
     categoria: "SSD y almacenamiento",
     precio: 360000,
     disponible: "disponible",
-    imagen: "assets/images/productos/ssd-samsung.svg",
+    imagen: "assets/images/productos/ssd-samsung.jpg",
     descripcion: "Almacenamiento NVMe ultrarrápido con tecnología V-NAND y control térmico inteligente para creadores y gamers.",
     destacado: true,
     especificaciones: {
@@ -51,7 +51,7 @@ const PRODUCTOS_DATA = [
     categoria: "Memorias RAM",
     precio: 95000,
     disponible: "disponible",
-    imagen: "assets/images/productos/ram-ddr4.svg",
+    imagen: "assets/images/productos/ram-ddr4.jpg",
     descripcion: "Módulo de memoria RAM con disipador de perfil bajo para equipos de escritorio y estaciones de trabajo.",
     destacado: true,
     especificaciones: {
@@ -70,7 +70,7 @@ const PRODUCTOS_DATA = [
     categoria: "Memorias RAM",
     precio: 185000,
     disponible: "disponible",
-    imagen: "assets/images/productos/ram-laptop.svg",
+    imagen: "assets/images/productos/ram-laptop.jpg",
     descripcion: "Módulo SO-DIMM para aumentar la multitarea y velocidad de respuesta en computadores portátiles modernos.",
     destacado: false,
     especificaciones: {
@@ -88,7 +88,7 @@ const PRODUCTOS_DATA = [
     categoria: "Computadores portátiles",
     precio: 2950000,
     disponible: "consultar",
-    imagen: "assets/images/productos/laptop-lenovo.svg",
+    imagen: "assets/images/productos/laptop-lenovo.jpg",
     descripcion: "Portátil empresarial resistente con procesador Intel Core i5 de 12ª generación, 16 GB de RAM y 512 GB SSD NVMe.",
     destacado: true,
     especificaciones: {
@@ -107,7 +107,7 @@ const PRODUCTOS_DATA = [
     categoria: "Computadores portátiles",
     precio: 2680000,
     disponible: "disponible",
-    imagen: "assets/images/productos/laptop-asus.svg",
+    imagen: "assets/images/productos/laptop-asus.jpg",
     descripcion: "Increíble pantalla OLED con colores vivos, procesador AMD Ryzen 5 y diseño ultradelgado para trabajo y estudio.",
     destacado: false,
     especificaciones: {
@@ -126,7 +126,7 @@ const PRODUCTOS_DATA = [
     categoria: "Computadores de escritorio",
     precio: 2150000,
     disponible: "disponible",
-    imagen: "assets/images/productos/pc-torre.svg",
+    imagen: "assets/images/productos/pc-torre.png",
     descripcion: "Equipo de escritorio ideal para oficina, contabilidad y multitarea pesada. Optimizado con componentes certificados.",
     destacado: true,
     especificaciones: {
@@ -145,7 +145,7 @@ const PRODUCTOS_DATA = [
     categoria: "Teclados y mouse",
     precio: 110000,
     disponible: "disponible",
-    imagen: "assets/images/productos/combo-logitech.svg",
+    imagen: "assets/images/productos/combo-logitech.jpg",
     descripcion: "Conexión inalámbrica fiable de 2.4 GHz de largo alcance, teclas multimedia y batería de duración prolongada.",
     destacado: false,
     especificaciones: {
@@ -163,7 +163,7 @@ const PRODUCTOS_DATA = [
     categoria: "Teclados y mouse",
     precio: 165000,
     disponible: "disponible",
-    imagen: "assets/images/productos/teclado-mecanico.svg",
+    imagen: "assets/images/productos/teclado-mecanico.jpg",
     descripcion: "Estructura metálica resistente, interruptores Outemu mecánicos y retroiluminación personalizable.",
     destacado: false,
     especificaciones: {
@@ -181,7 +181,7 @@ const PRODUCTOS_DATA = [
     categoria: "Monitores",
     precio: 690000,
     disponible: "disponible",
-    imagen: "assets/images/productos/monitor-lg.svg",
+    imagen: "assets/images/productos/monitor-lg.jpg",
     descripcion: "Tasa de refresco ultra fluida de 144 Hz, 1 ms de tiempo de respuesta y panel IPS para colores exactos.",
     destacado: true,
     especificaciones: {
@@ -199,7 +199,7 @@ const PRODUCTOS_DATA = [
     categoria: "Equipos de redes",
     precio: 185000,
     disponible: "disponible",
-    imagen: "assets/images/productos/router-tplink.svg",
+    imagen: "assets/images/productos/router-tplink.jpg",
     descripcion: "Tecnología Wi-Fi 6 de nueva generación con mayor velocidad, capacidad para más dispositivos y cobertura ampliada.",
     destacado: false,
     especificaciones: {
@@ -217,7 +217,7 @@ const PRODUCTOS_DATA = [
     categoria: "Accesorios tecnológicos",
     precio: 45000,
     disponible: "disponible",
-    imagen: "assets/images/productos/pasta-termica.svg",
+    imagen: "assets/images/productos/pasta-termica.jpg",
     descripcion: "Compuesto térmico microparticulado a base de carbono que garantiza una disipación óptima del calor en CPUs y GPUs.",
     destacado: false,
     especificaciones: {
@@ -234,7 +234,7 @@ const PRODUCTOS_DATA = [
     categoria: "Cables y adaptadores",
     precio: 38000,
     disponible: "disponible",
-    imagen: "assets/images/productos/cable-hdmi.svg",
+    imagen: "assets/images/productos/cable-hdmi.jpg",
     descripcion: "Ancho de banda de 48 Gbps con soporte HDR dinámico, eARC y conectores reforzados en nylon trenzado.",
     destacado: false,
     especificaciones: {
@@ -251,7 +251,7 @@ const PRODUCTOS_DATA = [
     categoria: "Accesorios tecnológicos",
     precio: 75000,
     disponible: "disponible",
-    imagen: "assets/images/productos/base-refrigerante.svg",
+    imagen: "assets/images/productos/base-refrigerante.jpg",
     descripcion: "Soporte ergonómico con inclinación ajustable y flujo de aire silencioso para reducir la temperatura en portátiles.",
     destacado: false,
     especificaciones: {
@@ -268,7 +268,7 @@ const PRODUCTOS_DATA = [
     categoria: "Cables y adaptadores",
     precio: 85000,
     disponible: "disponible",
-    imagen: "assets/images/productos/hub-usbc.svg",
+    imagen: "assets/images/productos/hub-usbc.jpg",
     descripcion: "Hub multipuerto portátil en cuerpo de aluminio para laptops que carecen de puertos HDMI estándar.",
     destacado: false,
     especificaciones: {
@@ -285,7 +285,7 @@ const PRODUCTOS_DATA = [
     categoria: "Impresoras y accesorios",
     precio: 52000,
     disponible: "agotado",
-    imagen: "assets/images/productos/kit-impresora.svg",
+    imagen: "assets/images/productos/kit-impresora.jpg",
     descripcion: "Kit de suministros y limpieza para mantenimiento de cabezales y rodillos en equipos de impresión comercial.",
     destacado: false,
     especificaciones: {

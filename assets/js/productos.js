@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ==========================================================================
  * RENDERIZADO Y CONTROL DE PRODUCTOS (CATÁLOGO DIGITAL)
  * Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
