@@ -498,9 +498,24 @@
 }
 
 .product-image-wrap img {
+  width: auto;
+  max-width: 100%;
   max-height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: contain;
   transition: transform var(--transition-normal);
+}
+
+.productos-grid,
+#productos-grid-container {
+  min-height: 520px;
+  contain: layout;
+}
+
+#todos-servicios-container,
+#servicios-destacados-container {
+  min-height: 400px;
+  contain: layout;
 }
 
 .product-card:hover .product-image-wrap img {
@@ -1032,10 +1047,11 @@
   justify-content: center;
   box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
   z-index: var(--z-floating);
-  transition: all var(--transition-normal);
+  transition: transform var(--transition-normal), background-color var(--transition-normal);
   cursor: pointer;
   text-decoration: none;
-  animation: whatsappPulse 2.2s infinite ease-in-out;
+  will-change: transform;
+  animation: whatsappPulse 2.5s infinite ease-in-out;
 }
 
 .whatsapp-float::before {
@@ -1055,15 +1071,12 @@
 @keyframes whatsappPulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
   }
   50% {
-    transform: scale(1.08);
-    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.7);
+    transform: scale(1.06);
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 4px 18px rgba(37, 211, 102, 0.45);
   }
 }
 

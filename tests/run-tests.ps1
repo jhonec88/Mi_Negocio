@@ -65,6 +65,8 @@ $ArchivosRequeridos = @(
   "assets\css\global.css",
   "assets\css\components.css",
   "assets\css\responsive.css",
+  "assets\css\styles.css",
+  "assets\css\styles.min.css",
   "assets\js\security.js",
   "assets\js\whatsapp.js",
   "assets\js\modal.js",

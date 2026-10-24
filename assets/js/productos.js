@@ -64,12 +64,13 @@ function renderizarProductos(productos, contenedorId) {
     ? window.Security.escapeHTML
     : (str => String(str || "").replace(/[&<>"']/g, ""));
 
-  contenedor.innerHTML = productos.map(p => {
+  contenedor.innerHTML = productos.map((p, index) => {
     const nombre = esc(p.nombre);
     const marca = esc(p.marca);
     const categoria = esc(p.categoria);
     const desc = esc(p.descripcion);
     const imagen = (window.Security && typeof window.Security.sanitizeUrl === "function") ? window.Security.sanitizeUrl(p.imagen) : p.imagen;
+    const loadingAttr = index === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
 
     return `
     <article class="product-card" data-product-id="${Number(p.id)}">
@@ -77,7 +78,7 @@ function renderizarProductos(productos, contenedorId) {
         <div class="product-badges">
           ${obtenerBadgeDisponibilidad(p.disponible)}
         </div>
-        <img src="${imagen}" alt="${nombre}" loading="lazy" width="280" height="210" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
+        <img src="${imagen}" alt="${nombre}" ${loadingAttr} width="280" height="210" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
       </div>
       
       <div class="product-body">
