@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suite de Testing Automatizado | TecnoFix Colombia</title>
+  
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+
+  <style>
+    body {
+      background-color: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-header {
+      background: linear-gradient(135deg, var(--color-secondary) 0%, #1e293b 100%);
+      color: #ffffff;
+      padding: 2rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .test-header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .test-title-group h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+      color: #ffffff;
+    }
+
+    .test-subtitle {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-run-all {
+      background: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-run-all:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-run-all:active {
+      transform: translateY(0);
+    }
+
+    .btn-back-site {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.7rem 1.2rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s ease;
+    }
+
+    .btn-back-site:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Estadísticas */
+    .test-stats-grid {
+      max-width: 1200px;
+      margin: -1.5rem auto 1.5rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stat-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 0.825rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      font-family: var(--font-family-mono);
+    }
+
+    .stat-passed .stat-value { color: var(--color-success); }
+    .stat-failed .stat-value { color: var(--color-error); }
+    .stat-total .stat-value { color: var(--color-primary); }
+    .stat-duration .stat-value { color: var(--color-accent); font-size: 1.7rem; }
+
+    /* Barra de Progreso */
+    .progress-bar-wrap {
+      max-width: 1200px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .progress-bar-track {
+      background: var(--color-border);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .progress-bar-passed {
+      background: var(--color-success);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar-failed {
+      background: var(--color-error);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Filtros y Controles */
+    .test-controls-bar {
+      max-width: 1200px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-chip {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-chip.active {
+      background: var(--color-primary);
+      color: #ffffff;
+      border-color: var(--color-primary);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 0.5rem 0.9rem 0.5rem 2.2rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      color: var(--color-text-primary);
+      font-size: 0.9rem;
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    /* Lista de Suites */
+    .test-suites-container {
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .suite-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+
+    .suite-header {
+      padding: 1.1rem 1.5rem;
+      background: var(--color-bg-tertiary);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .suite-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .suite-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge-test-count {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      font-family: var(--font-family-mono);
+    }
+
+    .badge-status {
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-status.passed {
+      background: var(--color-success-light);
+      color: var(--color-success);
+    }
+
+    .badge-status.failed {
+      background: var(--color-error-light);
+      color: var(--color-error);
+    }
+
+    .suite-test-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-item {
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: background 0.15s ease;
+    }
+
+    .test-item:last-child {
+      border-bottom: none;
+    }
+
+    .test-item:hover {
+      background: var(--color-bg-secondary);
+    }
+
+    .test-item-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .test-name-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.925rem;
+      color: var(--color-text-primary);
+    }
+
+    .test-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .test-icon.passed { color: var(--color-success); }
+    .test-icon.failed { color: var(--color-error); }
+    .test-icon.pending { color: var(--color-text-muted); }
+
+    .test-duration {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      font-family: var(--font-family-mono);
+    }
+
+    .test-error-box {
+      margin-top: 0.4rem;
+      background: var(--color-error-light);
+      color: var(--color-error);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-family-mono);
+      font-size: 0.85rem;
+      border-left: 3px solid var(--color-error);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabecera de la Suite de Pruebas -->
+  <header class="test-header">
+    <div class="test-header-container">
+      <div class="test-title-group">
+        <h1>
+          <svg style="width: 28px; height: 28px; color: var(--color-accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="m9 15 2 2 4-4"></path>
+          </svg>
+          TecnoFix — Panel de Testing Automatizado
+        </h1>
+        <div class="test-subtitle">
+          Verificación funcional integral de Seguridad, Carrito, WhatsApp, Filtros, Formulario, A11y y Datos.
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="btn-back-site">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Volver al Sitio
+        </a>
+        <button type="button" class="btn-run-all" id="btn-run-tests">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Ejecutar Pruebas
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Métricas y Resultados en Vivo -->
+  <section class="test-stats-grid" aria-label="Métricas de ejecución de pruebas">
+    <div class="stat-card stat-total">
+      <span class="stat-label">Total Pruebas</span>
+      <span class="stat-value" id="stat-total">0</span>
+    </div>
+    <div class="stat-card stat-passed">
+      <span class="stat-label">Pruebas Aprobadas</span>
+      <span class="stat-value" id="stat-passed">0</span>
+    </div>
+    <div class="stat-card stat-failed">
+      <span class="stat-label">Pruebas Fallidas</span>
+      <span class="stat-value" id="stat-failed">0</span>
+    </div>
+    <div class="stat-card stat-duration">
+      <span class="stat-label">Tiempo Total</span>
+      <span class="stat-value" id="stat-duration">0 ms</span>
+    </div>
+  </section>
+
+  <!-- Barra de Progreso Visual -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-track" role="progressbar" aria-label="Progreso de ejecución de pruebas">
+      <div class="progress-bar-passed" id="progress-passed"></div>
+      <div class="progress-bar-failed" id="progress-failed"></div>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros y Búsqueda -->
+  <div class="test-controls-bar">
+    <div class="filter-chips">
+      <button type="button" class="filter-chip active" data-filter="all">Todas</button>
+      <button type="button" class="filter-chip" data-filter="passed">Aprobadas</button>
+      <button type="button" class="filter-chip" data-filter="failed">Fallidas</button>
+    </div>
+
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="filter-search" placeholder="Buscar prueba o módulo..." aria-label="Buscar pruebas">
+    </div>
+  </div>
+
+  <!-- Contenedor Dinámico de Suites -->
+  <main class="test-suites-container" id="test-suites-container">
+    <!-- Renderizado por JS -->
+  </main>
+
+  <!-- Elemento oculto de renderizado para tests DOM -->
+  <div id="test-sandbox" style="display: none;" aria-hidden="true"></div>
+
+  <!-- Scripts del Negocio -->
+  <script src="../assets/js/security.js"></script>
+  <script src="../assets/js/whatsapp.js"></script>
+  <script src="../assets/js/modal.js"></script>
+  <script src="../assets/js/servicios.js"></script>
+  <script src="../assets/js/productos-data.js"></script>
+  <script src="../assets/js/productos.js"></script>
+  <script src="../assets/js/filtros.js"></script>
+  <script src="../assets/js/formulario.js"></script>
+  <script src="../assets/js/faq.js"></script>
+  <script src="../assets/js/carrito.js"></script>
+  <script src="../assets/js/menu.js"></script>
+
+  <!-- MiniTest Framework -->
+  <script src="framework/mini-test.js"></script>
+
+  <!-- Especificaciones de Pruebas -->
+  <script src="specs/security.spec.js"></script>
+  <script src="specs/carrito.spec.js"></script>
+  <script src="specs/whatsapp.spec.js"></script>
+  <script src="specs/filtros.spec.js"></script>
+  <script src="specs/formulario.spec.js"></script>
+  <script src="specs/data.spec.js"></script>
+  <script src="specs/ui-components.spec.js"></script>
+  <script src="specs/integrity.spec.js"></script>
+
+  <!-- Lógica del Dashboard de Pruebas -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let filtroEstado = "all";
+      let busquedaTexto = "";
+
+      const btnRun = document.getElementById("btn-run-tests");
+      const statTotal = document.getElementById("stat-total");
+      const statPassed = document.getElementById("stat-passed");
+      const statFailed = document.getElementById("stat-failed");
+      const statDuration = document.getElementById("stat-duration");
+      const progressPassed = document.getElementById("progress-passed");
+      const progressFailed = document.getElementById("progress-failed");
+      const container = document.getElementById("test-suites-container");
+      const searchInput = document.getElementById("filter-search");
+      const filterChips = document.querySelectorAll(".filter-chip");
+
+      function renderizarResultados() {
+        const suites = window.MiniTest.getSuites();
+        container.innerHTML = "";
+
+        suites.forEach(suite => {
+          // Filtrar tests según estado y búsqueda
+          const testsVisibles = suite.tests.filter(t => {
+            const coincideEstado = (filtroEstado === "all") || (t.status === filtroEstado);
+            const coincideTexto = !busquedaTexto || 
+              t.name.toLowerCase().includes(busquedaTexto) || 
+              suite.name.toLowerCase().includes(busquedaTexto);
+            return coincideEstado && coincideTexto;
+          });
+
+          if (testsVisibles.length === 0 && (filtroEstado !== "all" || busquedaTexto)) {
+            return;
+          }
+
+          const suiteCard = document.createElement("article");
+          suiteCard.className = "suite-card";
+
+          const tieneFallos = suite.failed > 0;
+          const statusBadge = tieneFallos 
+            ? `<span class="badge-status failed">${suite.failed} Fallida(s)</span>`
+            : `<span class="badge-status passed">Aprobada</span>`;
+
+          suiteCard.innerHTML = `
+            <div class="suite-header">
+              <div class="suite-title">
+                <svg style="width: 20px; height: 20px; color: ${tieneFallos ? 'var(--color-error)' : 'var(--color-success)'};" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  ${tieneFallos 
+                    ? '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>' 
+                    : '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'
+                  }
+                </svg>
+                <span>${suite.name}</span>
+              </div>
+              <div class="suite-badges">
+                <span class="badge-test-count">${suite.passed}/${suite.tests.length} OK</span>
+                ${statusBadge}
+              </div>
+            </div>
+            <div class="suite-test-list">
+              ${testsVisibles.map(t => {
+                const icono = t.status === "passed"
+                  ? '<svg class="test-icon passed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+                  : (t.status === "failed"
+                    ? '<svg class="test-icon failed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'
+                    : '<svg class="test-icon pending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>');
+
+                return `
+                  <div class="test-item">
+                    <div class="test-item-main">
+                      <div class="test-name-group">
+                        ${icono}
+                        <span>${t.name}</span>
+                      </div>
+                      <span class="test-duration">${t.duration} ms</span>
+                    </div>
+                    ${t.error ? `<div class="test-error-box">${t.error}</div>` : ""}
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          `;
+
+          container.appendChild(suiteCard);
+        });
+      }
+
+      async function ejecutar() {
+        btnRun.disabled = true;
+        btnRun.textContent = "Ejecutando...";
+
+        const result = await window.MiniTest.runAll(({ totalPassed, totalFailed }) => {
+          statPassed.textContent = totalPassed;
+          statFailed.textContent = totalFailed;
+        });
+
+        statTotal.textContent = result.totalTests;
+        statPassed.textContent = result.totalPassed;
+        statFailed.textContent = result.totalFailed;
+        statDuration.textContent = `${result.totalDuration} ms`;
+
+        const pctPassed = (result.totalPassed / result.totalTests) * 100;
+        const pctFailed = (result.totalFailed / result.totalTests) * 100;
+        progressPassed.style.width = `${pctPassed}%`;
+        progressFailed.style.width = `${pctFailed}%`;
+
+        btnRun.disabled = false;
+        btnRun.innerHTML = `
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Re-ejecutar Pruebas
+        `;
+
+        renderizarResultados();
+      }
+
+      btnRun.addEventListener("click", ejecutar);
+
+      // Filtros
+      filterChips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          filterChips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          filtroEstado = chip.dataset.filter;
+          renderizarResultados();
+        });
+      });
+
+      searchInput.addEventListener("input", (e) => {
+        busquedaTexto = e.target.value.toLowerCase().trim();
+        renderizarResultados();
+      });
+
+      // Ejecutar automáticamente al cargar
+      ejecutar();
+    });
+  </script>
+</body>
+</html>

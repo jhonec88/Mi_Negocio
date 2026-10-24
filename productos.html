@@ -1,19 +1,51 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo de Productos Tecnológicos y Repuestos | TecnoFix Colombia</title>
+  <title>Catálogo de Componentes Tecnológicos y SSD en Colombia | TecnoFix</title>
   
-  <meta name="description" content="Catálogo digital de productos y componentes tecnológicos: SSD NVMe y SATA, memorias RAM, computadores portátiles, teclados, mouse, monitores y accesorios en Colombia. Precios en COP.">
-  <meta name="keywords" content="catalogo tecnología colombia, comprar ssd kingston, memorias ram ddr4, portatiles lenovo, monitores lg, repuestos pc">
+  <!-- Políticas de Seguridad en el Cliente (Content Security Policy Fallback) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; form-action 'self' https://wa.me; frame-ancestors 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
+  <meta name="description" content="Venta de unidades SSD SATA y NVMe M.2, memorias RAM DDR4/DDR5, portátiles y accesorios en Bogotá y Colombia. Precios en pesos colombianos (COP), garantía directa y servicio de instalación.">
+  <meta name="keywords" content="comprar ssd colombia, ssd kingston bogota, memoria ram ddr4 precio cop, comprar portatil lenovo bogota, repuestos computadores colombia, disco solido unilago">
   <meta name="author" content="TecnoFix Colombia">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
-  <meta property="og:title" content="Catálogo de Productos Tecnológicos | TecnoFix Colombia">
-  <meta property="og:description" content="Encuentra componentes, periféricos y equipos garantizados con cotización directa en pesos colombianos.">
+  <!-- Canónicas e Internacionalización (Hreflang) -->
+  <link rel="canonical" href="https://tecnofix.com.co/productos.html">
+  <link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/productos.html">
+  <link rel="alternate" hreflang="es" href="https://tecnofix.com.co/productos.html">
+  <link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/productos.html">
+
+  <!-- Metadatos Geográficos (GEO / Local SEO) -->
+  <meta name="geo.region" content="CO-DC">
+  <meta name="geo.placename" content="Bogotá, Colombia">
+  <meta name="geo.position" content="4.6645;-74.0583">
+  <meta name="ICBM" content="4.6645, -74.0583">
+
+  <!-- Open Graph / Redes Sociales (Facebook, WhatsApp, LinkedIn, Telegram) -->
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/images/productos/ssd-kingston.svg">
+  <meta property="og:title" content="Catálogo de Productos Tecnológicos y Repuestos | TecnoFix Colombia">
+  <meta property="og:description" content="Explora computadores, unidades SSD SATA y NVMe M.2, memorias RAM DDR4/DDR5, periféricos y accesorios con precios transparentes en pesos colombianos (COP).">
+  <meta property="og:url" content="https://tecnofix.com.co/productos.html">
+  <meta property="og:site_name" content="TecnoFix Colombia">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:image" content="https://tecnofix.com.co/assets/images/og/og-productos.jpg">
+  <meta property="og:image:secure_url" content="https://tecnofix.com.co/assets/images/og/og-productos.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Catálogo de Componentes Tecnológicos, Discos SSD y Memorias RAM - TecnoFix Colombia">
+
+  <!-- Metadatos Twitter (X Cards) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Catálogo de Productos Tecnológicos y Repuestos | TecnoFix Colombia">
+  <meta name="twitter:description" content="SSD Kingston, Samsung, memorias RAM y portátiles garantizados con entrega en Bogotá y envíos a todo Colombia.">
+  <meta name="twitter:image" content="https://tecnofix.com.co/assets/images/og/og-productos.jpg">
+  <meta name="twitter:image:alt" content="Catálogo de Tecnología TecnoFix Colombia">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
@@ -22,6 +54,85 @@
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <!-- Datos Estructurados JSON-LD (Productos & Breadcrumb) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://tecnofix.com.co/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Catálogo de Productos",
+            "item": "https://tecnofix.com.co/productos.html"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "name": "Catálogo Tecnológico TecnoFix Colombia",
+        "description": "Componentes de hardware, unidades SSD, memorias RAM y accesorios con precios en pesos colombianos",
+        "itemListElement": [
+          {
+            "@type": "Product",
+            "position": 1,
+            "name": "SSD Kingston A400 480 GB SATA III",
+            "image": "https://tecnofix.com.co/assets/images/productos/ssd-kingston.jpg",
+            "description": "Unidad de estado sólido de alta velocidad para revivir y acelerar portátiles y PCs.",
+            "brand": { "@type": "Brand", "name": "Kingston" },
+            "offers": {
+              "@type": "Offer",
+              "price": "145000",
+              "priceCurrency": "COP",
+              "priceValidUntil": "2026-12-31",
+              "availability": "https://schema.org/InStock",
+              "seller": { "@type": "Organization", "name": "TecnoFix Colombia" }
+            }
+          },
+          {
+            "@type": "Product",
+            "position": 2,
+            "name": "SSD NVMe M.2 Samsung 980 1 TB PCIe 3.0",
+            "image": "https://tecnofix.com.co/assets/images/productos/ssd-samsung.jpg",
+            "description": "Almacenamiento NVMe ultrarrápido con tecnología V-NAND para creadores y gamers.",
+            "brand": { "@type": "Brand", "name": "Samsung" },
+            "offers": {
+              "@type": "Offer",
+              "price": "360000",
+              "priceCurrency": "COP",
+              "availability": "https://schema.org/InStock",
+              "seller": { "@type": "Organization", "name": "TecnoFix Colombia" }
+            }
+          },
+          {
+            "@type": "Product",
+            "position": 3,
+            "name": "Memoria RAM Kingston Fury Beast DDR4 8 GB 3200MHz",
+            "image": "https://tecnofix.com.co/assets/images/productos/ram-ddr4.jpg",
+            "description": "Módulo de memoria RAM con disipador de perfil bajo para equipos de escritorio.",
+            "brand": { "@type": "Brand", "name": "Kingston" },
+            "offers": {
+              "@type": "Offer",
+              "price": "95000",
+              "priceCurrency": "COP",
+              "availability": "https://schema.org/InStock",
+              "seller": { "@type": "Organization", "name": "TecnoFix Colombia" }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -90,14 +201,32 @@
 
   <main id="main-content">
     
-    <!-- CABECERA DE PÁGINA -->
+    <!-- CABECERA DE PÁGINA Y MIGAS DE PAN (BREADCRUMB LIST) -->
     <section class="section section-sm section-bg-secondary" style="border-bottom: 1px solid var(--color-border);">
-      <div class="container text-center">
-        <div class="section-tag section-tag-accent">Vitrina Digital</div>
-        <h1 style="margin-bottom: 0.75rem;">Catálogo de Productos y Componentes</h1>
-        <p class="section-subtitle container-narrow" style="margin-left: auto; margin-right: auto;">
-          Explora nuestra selección de unidades SSD, memorias RAM, computadores, periféricos y accesorios garantizados con precios en pesos colombianos (COP).
-        </p>
+      <div class="container">
+        
+        <nav aria-label="Miga de pan" class="breadcrumb-nav">
+          <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <a href="index.html" class="breadcrumb-link" itemprop="item"><span itemprop="name">Inicio</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <li class="breadcrumb-separator" aria-hidden="true">/</li>
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <span class="breadcrumb-current" itemprop="name" aria-current="page">Catálogo de Productos</span>
+              <meta itemprop="position" content="2" />
+            </li>
+          </ol>
+        </nav>
+
+        <div class="text-center">
+          <div class="section-tag section-tag-accent">Vitrina Digital</div>
+          <h1 style="margin-bottom: 0.75rem;">Catálogo de Productos Tecnológicos y Repuestos</h1>
+          <p class="section-subtitle container-narrow" style="margin-left: auto; margin-right: auto;">
+            Explora nuestra selección de unidades SSD, memorias RAM, computadores, periféricos y accesorios garantizados con precios en pesos colombianos (COP).
+          </p>
+        </div>
+
       </div>
     </section>
 
@@ -348,6 +477,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
   </button>
 
+  <script src="assets/js/security.js" defer></script>
   <script src="assets/js/whatsapp.js" defer></script>
   <script src="assets/js/modal.js" defer></script>
   <script src="assets/js/productos-data.js" defer></script>

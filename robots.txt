@@ -1,0 +1,30 @@
+# Robots.txt para TecnoFix Colombia - Servicio Técnico y Tienda Tecnológica
+# Dominio: https://tecnofix.com.co
+
+User-agent: *
+Allow: /
+
+# Bloquear recursos irrelevantes o directorios no navegables directamente
+Disallow: /assets/icons/
+
+# Rastreo óptimo para motores de búsqueda y motores de respuesta (Google, Bing, Perplexity, OpenAI, Anthropic)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Mapa del sitio oficial
+Sitemap: https://tecnofix.com.co/sitemap.xml

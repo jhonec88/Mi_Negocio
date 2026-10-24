@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- 1. Inicio -->
+  <url>
+    <loc>https://tecnofix.com.co/</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tecnofix.com.co/assets/images/productos/placeholder-tech.svg</image:loc>
+      <image:title>TecnoFix Colombia - Servicio Técnico Especializado de Computadores</image:title>
+    </image:image>
+  </url>
+
+  <!-- 2. Servicios Técnicos Especializados -->
+  <url>
+    <loc>https://tecnofix.com.co/servicios.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/servicios.html" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://tecnofix.com.co/assets/images/galeria/taller-1.svg</image:loc>
+      <image:title>Laboratorio de Diagnóstico y Reparación de Computadores</image:title>
+    </image:image>
+  </url>
+
+  <!-- 3. Catálogo de Productos y Componentes -->
+  <url>
+    <loc>https://tecnofix.com.co/productos.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/productos.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/productos.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/productos.html" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://tecnofix.com.co/assets/images/productos/ssd-kingston.jpg</image:loc>
+      <image:title>Catálogo de Unidades SSD, Memorias RAM y Accesorios</image:title>
+    </image:image>
+  </url>
+
+  <!-- 4. Preguntas Frecuentes y Centro AEO -->
+  <url>
+    <loc>https://tecnofix.com.co/preguntas-frecuentes.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/preguntas-frecuentes.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/preguntas-frecuentes.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/preguntas-frecuentes.html" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 5. Nosotros y Trayectoria -->
+  <url>
+    <loc>https://tecnofix.com.co/nosotros.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/nosotros.html" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://tecnofix.com.co/assets/images/galeria/taller-2.svg</image:loc>
+      <image:title>Equipo Técnico y Taller de TecnoFix Colombia</image:title>
+    </image:image>
+  </url>
+
+  <!-- 6. Contacto y Localización Bogotá -->
+  <url>
+    <loc>https://tecnofix.com.co/contacto.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://tecnofix.com.co/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/contacto.html" />
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

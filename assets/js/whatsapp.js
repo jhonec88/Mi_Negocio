@@ -22,11 +22,22 @@ function contactarWhatsApp(mensaje) {
     mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, deseo solicitar información sobre sus servicios técnicos y catálogo.`;
   }
   
-  const textoCodificado = encodeURIComponent(mensaje.trim());
-  const url = `https://wa.me/${WHATSAPP_CONFIG.phone}?text=${textoCodificado}`;
+  // Limpieza y sanitización de texto para WhatsApp
+  const mensajeLimpio = (window.Security && typeof window.Security.sanitizeText === "function")
+    ? window.Security.sanitizeText(mensaje, 2000)
+    : mensaje.trim();
+
+  // Asegurar que el teléfono contenga solo números
+  const telefonoLimpio = String(WHATSAPP_CONFIG.phone || "").replace(/\D/g, "");
+  const textoCodificado = encodeURIComponent(mensajeLimpio);
+  const url = `https://wa.me/${telefonoLimpio}?text=${textoCodificado}`;
   
-  // Apertura segura con noopener,noreferrer
-  window.open(url, "_blank", "noopener,noreferrer");
+  // Apertura segura con mitigación de reverse tabnabbing y validación de protocolo
+  if (window.Security && typeof window.Security.safeOpen === "function") {
+    window.Security.safeOpen(url);
+  } else {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
 }
 
 /**

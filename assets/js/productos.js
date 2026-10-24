@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==========================================================================
  * RENDERIZADO Y CONTROL DE PRODUCTOS (CATÁLOGO DIGITAL)
  * Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
@@ -60,23 +60,34 @@ function renderizarProductos(productos, contenedorId) {
     return;
   }
 
-  contenedor.innerHTML = productos.map(p => `
-    <article class="product-card" data-product-id="${p.id}">
+  const esc = (window.Security && typeof window.Security.escapeHTML === "function")
+    ? window.Security.escapeHTML
+    : (str => String(str || "").replace(/[&<>"']/g, ""));
+
+  contenedor.innerHTML = productos.map(p => {
+    const nombre = esc(p.nombre);
+    const marca = esc(p.marca);
+    const categoria = esc(p.categoria);
+    const desc = esc(p.descripcion);
+    const imagen = (window.Security && typeof window.Security.sanitizeUrl === "function") ? window.Security.sanitizeUrl(p.imagen) : p.imagen;
+
+    return `
+    <article class="product-card" data-product-id="${Number(p.id)}">
       <div class="product-image-wrap">
         <div class="product-badges">
           ${obtenerBadgeDisponibilidad(p.disponible)}
         </div>
-        <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" width="280" height="210" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
+        <img src="${imagen}" alt="${nombre}" loading="lazy" width="280" height="210" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
       </div>
       
       <div class="product-body">
         <div class="product-meta">
-          <span class="product-brand">${p.marca}</span>
-          <span class="product-category-text">${p.categoria}</span>
+          <span class="product-brand">${marca}</span>
+          <span class="product-category-text">${categoria}</span>
         </div>
         
-        <h3 class="product-title" title="${p.nombre}">${p.nombre}</h3>
-        <p class="product-desc">${p.descripcion}</p>
+        <h3 class="product-title" title="${nombre}">${nombre}</h3>
+        <p class="product-desc">${desc}</p>
         
         <div class="product-price-row">
           <div>
@@ -86,10 +97,10 @@ function renderizarProductos(productos, contenedorId) {
         </div>
 
         <div class="product-actions">
-          <button type="button" class="btn btn-outline btn-sm" onclick="mostrarDetalleProducto(${p.id})">
+          <button type="button" class="btn btn-outline btn-sm" onclick="mostrarDetalleProducto(${Number(p.id)})">
             Ver detalles
           </button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="agregarAlCarrito(${p.id})" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''} aria-label="Agregar ${p.nombre} al carrito de compras">
+          <button type="button" class="btn btn-primary btn-sm" onclick="agregarAlCarrito(${Number(p.id)})" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''} aria-label="Agregar ${nombre} al carrito de compras">
             <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="9" cy="21" r="1"></circle>
               <circle cx="20" cy="21" r="1"></circle>
@@ -100,7 +111,8 @@ function renderizarProductos(productos, contenedorId) {
         </div>
       </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
 }
 
 /**
@@ -112,6 +124,14 @@ function mostrarDetalleProducto(idProducto) {
   const p = window.PRODUCTOS_DATA.find(item => item.id === idProducto);
   if (!p) return;
 
+  const esc = (window.Security && typeof window.Security.escapeHTML === "function")
+    ? window.Security.escapeHTML
+    : (str => String(str || "").replace(/[&<>"']/g, ""));
+
+  const nombreSeguro = esc(p.nombre);
+  const marcaSegura = esc(p.marca);
+  const descSegura = esc(p.descripcion);
+  const imagenSegura = (window.Security && typeof window.Security.sanitizeUrl === "function") ? window.Security.sanitizeUrl(p.imagen) : p.imagen;
   const precioFormateado = formatearPrecioCOP(p.precio);
 
   // Armar tabla de especificaciones
@@ -120,8 +140,8 @@ function mostrarDetalleProducto(idProducto) {
     for (const [clave, valor] of Object.entries(p.especificaciones)) {
       filasSpecs += `
         <tr>
-          <th>${clave}</th>
-          <td>${valor}</td>
+          <th>${esc(clave)}</th>
+          <td>${esc(valor)}</td>
         </tr>
       `;
     }
@@ -131,15 +151,15 @@ function mostrarDetalleProducto(idProducto) {
     <div class="product-detail-modal">
       <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center;">
         <div style="flex: 1; min-width: 240px; background-color: var(--color-bg-secondary); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-border);">
-          <img src="${p.imagen}" alt="${p.nombre}" style="max-height: 200px; object-fit: contain;" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
+          <img src="${imagenSegura}" alt="${nombreSeguro}" style="max-height: 200px; object-fit: contain;" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
         </div>
         <div style="flex: 1.2; min-width: 240px;">
           <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
-            <span class="badge badge-category">${p.marca}</span>
+            <span class="badge badge-category">${marcaSegura}</span>
             ${obtenerBadgeDisponibilidad(p.disponible)}
           </div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">${p.nombre}</h3>
-          <p class="text-sm" style="margin-bottom: 1rem;">${p.descripcion}</p>
+          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">${nombreSeguro}</h3>
+          <p class="text-sm" style="margin-bottom: 1rem;">${descSegura}</p>
           <div style="background-color: var(--color-bg-secondary); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
             <span class="text-xs text-muted" style="text-transform: uppercase;">Precio de referencia</span>
             <div style="font-size: 1.5rem; font-weight: 800; color: var(--color-primary);">${precioFormateado}</div>
@@ -162,7 +182,7 @@ function mostrarDetalleProducto(idProducto) {
 
   const footerHtml = `
     <button type="button" class="btn btn-outline" onclick="cerrarModal()">Cerrar</button>
-    <button type="button" class="btn btn-primary" onclick="agregarAlCarrito(${p.id}); cerrarModal();" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}>
+    <button type="button" class="btn btn-primary" onclick="agregarAlCarrito(${Number(p.id)}); cerrarModal();" ${p.disponible === 'agotado' ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}>
       <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="20" cy="21" r="1"></circle>
@@ -170,13 +190,26 @@ function mostrarDetalleProducto(idProducto) {
       </svg>
       Agregar al carrito
     </button>
-    <button type="button" class="btn btn-whatsapp" onclick="consultarProductoWhatsApp('${p.nombre}', '${precioFormateado}', '${p.marca}'); cerrarModal();">
+    <button type="button" class="btn btn-whatsapp" id="btn-modal-wa-consultar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
       Consultar en WhatsApp
     </button>
   `;
 
-  abrirModal(p.nombre, bodyHtml, footerHtml);
+  abrirModal(nombreSeguro, bodyHtml, footerHtml);
+
+  // Vincular evento de forma segura sin interpolación en atributo inline
+  setTimeout(() => {
+    const btnWa = document.getElementById("btn-modal-wa-consultar");
+    if (btnWa) {
+      btnWa.addEventListener("click", () => {
+        if (typeof window.consultarProductoWhatsApp === "function") {
+          window.consultarProductoWhatsApp(p.nombre, precioFormateado, p.marca);
+        }
+        cerrarModal();
+      });
+    }
+  }, 50);
 }
 
 // Exponer en el objeto global

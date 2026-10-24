@@ -1,21 +1,56 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reparación y mantenimiento de computadores | TecnoFix Colombia</title>
+  <title>Reparación y Mantenimiento de Computadores en Bogotá | TecnoFix Colombia</title>
   
-  <!-- Metadatos SEO y Open Graph (Sección 19 y 21) -->
-  <meta name="description" content="Servicio técnico profesional de computadores portátiles y de escritorio. Mantenimiento preventivo, reparación, instalación de SSD, memorias RAM y catálogo de productos tecnológicos en Colombia.">
-  <meta name="keywords" content="reparación de computadores, servicio técnico portátiles, mantenimiento preventivo PC, cambio SSD, memorias RAM, Colombia">
+  <!-- Políticas de Seguridad en el Cliente (Content Security Policy Fallback) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; form-action 'self' https://wa.me; frame-ancestors 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
+  <!-- Metadatos SEO Técnicos (Sección 19 y 21) -->
+  <meta name="description" content="Servicio técnico profesional de computadores portátiles y PC en Bogotá, Colombia. Mantenimiento térmico, reparación de placas, cambio a SSD, ampliación de RAM y diagnósticos con garantía por escrito. Cotiza por WhatsApp.">
+  <meta name="keywords" content="reparación de computadores bogota, servicio tecnico computadores colombia, mantenimiento preventivo pc bogota, cambio disco solido ssd, reparacion de portatiles unilago chapinero, soporte tecnico computadores">
   <meta name="author" content="TecnoFix Colombia">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  
+  <!-- Canónicas e Internacionalización (Hreflang) -->
+  <link rel="canonical" href="https://tecnofix.com.co/">
+  <link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/">
+  <link rel="alternate" hreflang="es" href="https://tecnofix.com.co/">
+  <link rel="alternate" hreflang="x-default" href="https://tecnofix.com.co/">
 
-  <meta property="og:title" content="Reparación y mantenimiento de computadores | TecnoFix Colombia">
-  <meta property="og:description" content="Diagnóstico, reparación y venta de componentes tecnológicos con atención personalizada y cotización directa por WhatsApp.">
+  <!-- Metadatos Geográficos (GEO / Local SEO) -->
+  <meta name="geo.region" content="CO-DC">
+  <meta name="geo.placename" content="Bogotá, Colombia">
+  <meta name="geo.position" content="4.6645;-74.0583">
+  <meta name="ICBM" content="4.6645, -74.0583">
+
+  <!-- Open Graph / Redes Sociales (Facebook, WhatsApp, LinkedIn, Telegram) -->
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/images/productos/placeholder-tech.svg">
+  <meta property="og:title" content="Servicio Técnico de Computadores y Venta de Tecnología | TecnoFix Colombia">
+  <meta property="og:description" content="Reparación, mantenimiento y optimización de computadores portátiles y PC en Bogotá. Diagnóstico certero, instalación de SSD, memoria RAM y garantía escrita.">
+  <meta property="og:url" content="https://tecnofix.com.co/">
+  <meta property="og:site_name" content="TecnoFix Colombia">
   <meta property="og:locale" content="es_CO">
+  <meta property="og:image" content="https://tecnofix.com.co/assets/images/og/og-home.jpg">
+  <meta property="og:image:secure_url" content="https://tecnofix.com.co/assets/images/og/og-home.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TecnoFix Colombia - Servicio Técnico Especializado y Tienda Tecnológica en Bogotá">
+
+  <!-- Metadatos Twitter (X Cards) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Servicio Técnico de Computadores y Venta de Tecnología | TecnoFix Colombia">
+  <meta name="twitter:description" content="Reparación, mantenimiento preventivo y venta de tecnología con garantía escrita y atención directa por WhatsApp en Bogotá.">
+  <meta name="twitter:image" content="https://tecnofix.com.co/assets/images/og/og-home.jpg">
+  <meta name="twitter:image:alt" content="TecnoFix Colombia - Servicio Técnico y Tienda en Bogotá">
+
+  <!-- Optimización de Carga y Recursos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="https://wa.me">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -26,6 +61,186 @@
   <link rel="stylesheet" href="assets/css/global.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <!-- Datos Estructurados JSON-LD (SEO, GEO y AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://tecnofix.com.co/#website",
+        "url": "https://tecnofix.com.co/",
+        "name": "TecnoFix Colombia",
+        "description": "Servicio técnico especializado en computadores y tienda de componentes tecnológicos en Colombia",
+        "inLanguage": "es-CO",
+        "publisher": {
+          "@id": "https://tecnofix.com.co/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://tecnofix.com.co/productos.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": ["LocalBusiness", "ComputerRepairService", "ComputerStore"],
+        "@id": "https://tecnofix.com.co/#organization",
+        "name": "TecnoFix Colombia",
+        "alternateName": "TecnoFix Servicio Técnico y Tienda",
+        "url": "https://tecnofix.com.co/",
+        "logo": "https://tecnofix.com.co/favicon.svg",
+        "image": "https://tecnofix.com.co/assets/images/galeria/taller-1.svg",
+        "telephone": "+573001234567",
+        "email": "soporte@tecnofix.com.co",
+        "priceRange": "$$",
+        "currenciesAccepted": "COP",
+        "paymentAccepted": "Efectivo, Nequi, Daviplata, Bancolombia, PSE, Tarjeta de Crédito",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Carrera 15 # 77-05, Chapinero / Sector Tecnológico Unilago",
+          "addressLocality": "Bogotá",
+          "addressRegion": "Bogotá D.C.",
+          "postalCode": "110221",
+          "addressCountry": "CO"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 4.6645,
+          "longitude": -74.0583
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
+        ],
+        "areaServed": [
+          { "@type": "City", "name": "Bogotá" },
+          { "@type": "AdministrativeArea", "name": "Chapinero, Bogotá" },
+          { "@type": "AdministrativeArea", "name": "Usaquén, Bogotá" },
+          { "@type": "AdministrativeArea", "name": "Suba, Bogotá" },
+          { "@type": "AdministrativeArea", "name": "Teusaquillo, Bogotá" },
+          { "@type": "AdministrativeArea", "name": "Cundinamarca" },
+          { "@type": "Country", "name": "Colombia" }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Servicios Técnicos Especializados",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Mantenimiento Preventivo de Computadores",
+                "description": "Limpieza interna profunda, desensamble, cambio de pasta térmica de alto rendimiento y lubricación de ventiladores.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "60000",
+                  "priceCurrency": "COP"
+                }
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Actualización a Unidad SSD y Ampliación de RAM",
+                "description": "Aceleración de rendimiento con clonación integral de datos sin pérdida de programas.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "40000",
+                  "priceCurrency": "COP"
+                }
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Reparación Electrónica de Portátiles y Pantallas",
+                "description": "Cambio de pantallas, bisagras, teclados y reparación de cortos en tarjeta madre."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "HowTo",
+        "@id": "https://tecnofix.com.co/#howto-reparacion",
+        "name": "Cómo solicitar reparación técnica o mantenimiento de computadores en Bogotá",
+        "description": "Guía paso a paso para diagnosticar, cotizar y reparar tu computador portátil o de escritorio con TecnoFix Colombia.",
+        "totalTime": "PT4H",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Identifica los síntomas de tu equipo",
+            "text": "Usa nuestro selector de diagnóstico o identifica si tu computador no enciende, se sobrecalienta, tiene virus o va lento."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Solicita cotización previa por WhatsApp",
+            "text": "Envíanos la marca, modelo y falla del equipo. Te daremos un presupuesto estimado sin compromiso ni costos ocultos."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Elige modalidad de entrega en taller o recogida a domicilio",
+            "text": "Acércate a nuestro taller en Chapinero (Bogotá) o programa recogida segura a domicilio en tu localidad."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Reparación, pruebas de estrés y entrega garantizada",
+            "text": "Intervenimos tu equipo, realizamos pruebas de estrés y te lo entregamos con garantía por escrito de hasta 12 meses."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://tecnofix.com.co/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Cuánto cuesta reparar o hacer mantenimiento a un computador en Bogotá?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "El mantenimiento preventivo completo inicia desde $60.000 COP e incluye desensamble, limpieza química, cambio de pasta térmica de alto rendimiento y pruebas térmicas. La instalación de unidades SSD inicia desde $40.000 COP y en fallas electrónicas se entrega diagnóstico certero antes de autorizar."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cuánto tiempo demora la reparación de un portátil?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Los mantenimientos preventivos y cambio de SSD se entregan el mismo día (2 a 4 horas hábiles). Diagnósticos de fallas de encendido y cortos en placa madre toman entre 24 y 48 horas hábiles con reporte técnico."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Tienen servicio a domicilio en Bogotá?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí, contamos con servicio de recogida y entrega segura a domicilio en Bogotá (Chapinero, Usaquén, Suba, Teusaquillo, Fontibón, Engativá y zonas aledañas) y soporte remoto vía AnyDesk para incidentes de software en toda Colombia."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué garantía tienen los servicios y repuestos?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Entregamos garantía por escrito en cada servicio. Los repuestos nuevos (SSD, memorias RAM, pantallas) cuentan con 6 a 12 meses de garantía directa, y la mano de obra tiene garantía de 30 a 90 días."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -394,8 +609,8 @@
         </div>
 
         <div class="before-after-wrapper" aria-label="Comparador interactivo de antes y después de mantenimiento térmico">
-          <img src="assets/images/galeria/limpieza-despues.svg" alt="Disipador y ventilador después del mantenimiento limpio a 46°C" class="ba-image ba-image-after">
-          <img src="assets/images/galeria/limpieza-antes.svg" alt="Disipador y ventilador antes del mantenimiento con polvo a 88°C" class="ba-image ba-image-before">
+          <img src="assets/images/galeria/limpieza-despues.svg" alt="Disipador y ventilador después del mantenimiento limpio a 46°C" class="ba-image ba-image-after" loading="lazy" decoding="async">
+          <img src="assets/images/galeria/limpieza-antes.svg" alt="Disipador y ventilador antes del mantenimiento con polvo a 88°C" class="ba-image ba-image-before" loading="lazy" decoding="async">
           
           <div class="ba-slider-handle" tabindex="0" role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Control deslizante antes y después">
             <div class="ba-slider-button" aria-hidden="true">
@@ -460,6 +675,102 @@
             <p class="text-sm">Comunicación directa con el técnico responsable en cada etapa de la reparación de tu computador.</p>
           </div>
 
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         8.1 AEO & GEO: RESPUESTAS DIRECTAS Y COBERTURA EN BOGOTÁ Y COLOMBIA
+         Optimizado para Motores de Respuesta (AI Overviews, ChatGPT, Perplexity)
+         ---------------------------------------------------------------------- -->
+    <section class="section section-bg-secondary" id="aeo-faq-local">
+      <div class="container">
+        
+        <div class="section-header">
+          <div class="section-tag section-tag-accent">AEO & Local SEO</div>
+          <h2 class="section-title">Respuestas Rápidas sobre Servicio Técnico en Bogotá</h2>
+          <p class="section-subtitle">
+            Información concreta y verificada sobre precios, tiempos de entrega, garantías y modalidades de atención para usuarios y asistentes de búsqueda.
+          </p>
+        </div>
+
+        <!-- Bloque de respuesta directa AEO -->
+        <article class="aeo-direct-answer" itemscope itemtype="https://schema.org/Question">
+          <div class="aeo-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Respuesta Rápida Verificada
+          </div>
+          <h3 class="aeo-title" itemprop="name">¿Dónde reparar computadores en Bogotá con garantía y precio justo?</h3>
+          <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+            <p class="aeo-text" itemprop="text">
+              <strong>TecnoFix Colombia</strong> opera en Bogotá con sede principal en Chapinero (sector tecnológico Unilago) y cobertura en todas las localidades (Usaquén, Suba, Teusaquillo, Fontibón, Engativá y Centro). Ofrecemos diagnósticos en banco de pruebas, mantenimiento preventivo desde <strong>$60.000 COP</strong>, instalación de discos SSD desde <strong>$40.000 COP</strong> y garantías escritas de <strong>30 a 365 días</strong> según el tipo de servicio y repuesto. Se admiten pagos contra entrega en efectivo, Nequi, Daviplata, Bancolombia y PSE.
+            </p>
+          </div>
+        </article>
+
+        <!-- Cuadrícula AEO de Datos Clave -->
+        <div class="aeo-quick-facts-grid">
+          
+          <div class="aeo-fact-card">
+            <div class="aeo-fact-q">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              ¿Cuánto tiempo tarda el servicio?
+            </div>
+            <p class="aeo-fact-a">
+              Mantenimientos preventivos y cambio de SSD se entregan <strong>el mismo día (2 a 4 horas)</strong>. Reparaciones de motherboard y fallas de encendido requieren <strong>24 a 48 horas</strong> hábiles.
+            </p>
+          </div>
+
+          <div class="aeo-fact-card">
+            <div class="aeo-fact-q">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              ¿Qué garantía ofrecen?
+            </div>
+            <p class="aeo-fact-a">
+              Garantía por escrito: <strong>6 a 12 meses</strong> en repuestos nuevos (SSD, memorias RAM, pantallas) y <strong>30 a 90 días</strong> en mano de obra técnica contra cualquier defecto.
+            </p>
+          </div>
+
+          <div class="aeo-fact-card">
+            <div class="aeo-fact-q">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              ¿Hay recogida a domicilio en Bogotá?
+            </div>
+            <p class="aeo-fact-a">
+              <strong>Sí</strong>, coordinamos recogida y retorno seguro con motorizado de confianza en Bogotá. También recibimos equipos para mantenimiento empresarial en sitio y soporte remoto nacional.
+            </p>
+          </div>
+
+          <div class="aeo-fact-card">
+            <div class="aeo-fact-q">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              ¿Cuáles son los métodos de pago?
+            </div>
+            <p class="aeo-fact-a">
+              Pagas cuando recibes y pruebas tu equipo: <strong>Nequi, Daviplata, Bancolombia, PSE, efectivo</strong> y tarjetas de crédito sin recargos sorpresa.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Mención de localidades y zonas GEO -->
+        <div style="background-color: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--spacing-5); margin-top: var(--spacing-6);">
+          <strong style="color: var(--color-text-primary); font-size: 0.95rem; display: block; margin-bottom: 0.5rem;">
+            Zonas de cobertura directa en Bogotá D.C. y Cundinamarca:
+          </strong>
+          <div class="geo-local-tags">
+            <span class="geo-local-tag">Chapinero & Unilago</span>
+            <span class="geo-local-tag">Usaquén</span>
+            <span class="geo-local-tag">Suba</span>
+            <span class="geo-local-tag">Teusaquillo</span>
+            <span class="geo-local-tag">Fontibón</span>
+            <span class="geo-local-tag">Engativá</span>
+            <span class="geo-local-tag">Barrios Unidos</span>
+            <span class="geo-local-tag">Santa Fe & La Candelaria</span>
+            <span class="geo-local-tag">Chía & Cota</span>
+            <span class="geo-local-tag">Envíos a todo Colombia</span>
+          </div>
         </div>
 
       </div>
@@ -590,6 +901,7 @@
   </button>
 
   <!-- Scripts modulares en orden estricto -->
+  <script src="assets/js/security.js" defer></script>
   <script src="assets/js/whatsapp.js" defer></script>
   <script src="assets/js/modal.js" defer></script>
   <script src="assets/js/servicios.js" defer></script>

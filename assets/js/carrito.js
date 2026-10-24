@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==========================================================================
  * MÓDULO DEL CARRITO DE COMPRAS (SHOPPING CART)
  * Persistencia en localStorage, Drawer lateral interactivo y Pedido vía WhatsApp
@@ -14,9 +14,17 @@ const CARRITO_STORAGE_KEY = "tecnofix-cart";
 function obtenerCarrito() {
   try {
     const data = localStorage.getItem(CARRITO_STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed)) return [];
+
+    // Verificación de integridad y prevención de manipulación de precios/XSS
+    if (window.Security && typeof window.Security.validateCartData === "function") {
+      return window.Security.validateCartData(parsed, window.PRODUCTOS_DATA || []);
+    }
+    return parsed;
   } catch (e) {
-    console.error("Error al leer carrito de localStorage:", e);
+    console.error("[Seguridad] Error o manipulación al leer carrito de localStorage:", e);
     return [];
   }
 }
@@ -300,30 +308,42 @@ function renderizarCarritoDrawer() {
 
   footerContainer.style.display = "block";
 
-  // Listado de productos
+  // Listado de productos con escape XSS riguroso
+  const esc = (window.Security && typeof window.Security.escapeHTML === "function")
+    ? window.Security.escapeHTML
+    : (str => String(str || "").replace(/[&<>"']/g, ""));
+
   itemsContainer.innerHTML = `
     <div class="cart-items-list">
-      ${carrito.map(item => `
-        <div class="cart-item-row" data-id="${item.id}">
+      ${carrito.map(item => {
+        const nombreSeguro = esc(item.nombre);
+        const precioUnitario = typeof window.formatearPrecioCOP === "function" ? window.formatearPrecioCOP(item.precio) : `$ ${item.precio.toLocaleString("es-CO")} COP`;
+        const subtotal = typeof window.formatearPrecioCOP === "function" ? window.formatearPrecioCOP(item.precio * item.cantidad) : `$ ${(item.precio * item.cantidad).toLocaleString("es-CO")} COP`;
+        const imagenSegura = (window.Security && typeof window.Security.sanitizeUrl === "function") 
+          ? window.Security.sanitizeUrl(item.imagen) 
+          : item.imagen;
+
+        return `
+        <div class="cart-item-row" data-id="${Number(item.id)}">
           <div class="cart-item-img-wrap">
-            <img src="${item.imagen}" alt="${item.nombre}" width="60" height="60" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
+            <img src="${imagenSegura}" alt="${nombreSeguro}" width="60" height="60" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">
           </div>
           <div class="cart-item-details">
-            <div class="cart-item-title" title="${item.nombre}">${item.nombre}</div>
-            <div class="cart-item-price-unit">${typeof window.formatearPrecioCOP === "function" ? window.formatearPrecioCOP(item.precio) : `$ ${item.precio.toLocaleString("es-CO")} COP`}</div>
+            <div class="cart-item-title" title="${nombreSeguro}">${nombreSeguro}</div>
+            <div class="cart-item-price-unit">${precioUnitario}</div>
             
             <div class="cart-item-actions">
               <div class="cart-qty-controls">
-                <button type="button" class="cart-qty-btn" onclick="actualizarCantidadCarrito(${item.id}, -1)" aria-label="Reducir una unidad de ${item.nombre}">-</button>
-                <span class="cart-qty-value">${item.cantidad}</span>
-                <button type="button" class="cart-qty-btn" onclick="actualizarCantidadCarrito(${item.id}, 1)" aria-label="Aumentar una unidad de ${item.nombre}">+</button>
+                <button type="button" class="cart-qty-btn" onclick="actualizarCantidadCarrito(${Number(item.id)}, -1)" aria-label="Reducir una unidad de ${nombreSeguro}">-</button>
+                <span class="cart-qty-value">${Number(item.cantidad)}</span>
+                <button type="button" class="cart-qty-btn" onclick="actualizarCantidadCarrito(${Number(item.id)}, 1)" aria-label="Aumentar una unidad de ${nombreSeguro}">+</button>
               </div>
 
               <div class="cart-item-subtotal">
-                Subtotal: <strong>${typeof window.formatearPrecioCOP === "function" ? window.formatearPrecioCOP(item.precio * item.cantidad) : `$ ${(item.precio * item.cantidad).toLocaleString("es-CO")} COP`}</strong>
+                Subtotal: <strong>${subtotal}</strong>
               </div>
 
-              <button type="button" class="cart-item-remove-btn" onclick="eliminarDelCarrito(${item.id})" aria-label="Eliminar ${item.nombre} del carrito">
+              <button type="button" class="cart-item-remove-btn" onclick="eliminarDelCarrito(${Number(item.id)})" aria-label="Eliminar ${nombreSeguro} del carrito">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -332,7 +352,8 @@ function renderizarCarritoDrawer() {
             </div>
           </div>
         </div>
-      `).join("")}
+      `;
+      }).join("")}
     </div>
   `;
 

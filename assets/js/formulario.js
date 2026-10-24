@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==========================================================================
  * VALIDACIÓN Y GESTIÓN DE FORMULARIO DE CONTACTO
  * Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
@@ -21,7 +21,12 @@ function validarEmail(email) {
  * @returns {boolean}
  */
 function validarTelefono(tel) {
-  const soloDigitos = tel.replace(/\D/g, "");
+  if (!tel || typeof tel !== "string") return false;
+  let soloDigitos = tel.replace(/\D/g, "");
+  // Si incluye indicativo 57 de Colombia (ej: +57 300 123 4567 o 573001234567)
+  if (soloDigitos.startsWith("57") && soloDigitos.length === 12) {
+    soloDigitos = soloDigitos.slice(2);
+  }
   return soloDigitos.length >= 7 && soloDigitos.length <= 10;
 }
 
@@ -82,10 +87,32 @@ function inicializarFormularioContacto() {
     e.preventDefault();
     limpiarErroresFormulario(formEl);
 
+    // 0. CAPA DE SEGURIDAD 1: Verificación de Campo Trampa Honeypot (Anti-Bot)
+    const hpField = formEl.querySelector("#contacto-hp-field");
+    if (hpField && hpField.value.trim() !== "") {
+      console.warn("[Seguridad] Envío bloqueado por activación de trampa honeypot anti-spam.");
+      // Fallo silencioso: desorienta al bot automatizado sin notificarle
+      formEl.reset();
+      return;
+    }
+
+    // 0. CAPA DE SEGURIDAD 2: Control de Frecuencia / Rate Limiting (15 segundos de enfriamiento)
+    if (window.Security && typeof window.Security.checkRateLimit === "function") {
+      if (!window.Security.checkRateLimit("contacto_formulario", 15)) {
+        const remaining = window.Security.getRemainingCooldown("contacto_formulario", 15);
+        if (typeof window.mostrarToast === "function") {
+          window.mostrarToast(`Por favor espera ${remaining} segundos antes de enviar una nueva solicitud.`, "info");
+        } else {
+          alert(`Por favor espera ${remaining} segundos antes de enviar una nueva solicitud.`);
+        }
+        return;
+      }
+    }
+
     let esValido = true;
     let primerElementoInvalido = null;
 
-    // 1. Campo Nombre completo (Obligatorio)
+    // 1. Campo Nombre completo (Obligatorio, max 80 chars)
     const nombreInput = formEl.querySelector("#contacto-nombre");
     if (nombreInput) {
       const nombreVal = nombreInput.value.trim();
@@ -97,10 +124,14 @@ function inicializarFormularioContacto() {
         setCampoError(nombreInput, "El nombre debe tener al menos 3 caracteres.");
         esValido = false;
         if (!primerElementoInvalido) primerElementoInvalido = nombreInput;
+      } else if (nombreVal.length > 80) {
+        setCampoError(nombreInput, "El nombre no puede superar los 80 caracteres.");
+        esValido = false;
+        if (!primerElementoInvalido) primerElementoInvalido = nombreInput;
       }
     }
 
-    // 2. Campo Teléfono (Obligatorio)
+    // 2. Campo Teléfono (Obligatorio, max 20 chars)
     const telInput = formEl.querySelector("#contacto-telefono");
     if (telInput) {
       const telVal = telInput.value.trim();
@@ -115,10 +146,11 @@ function inicializarFormularioContacto() {
       }
     }
 
-    // 3. Campo Correo electrónico (Opcional)
+    // 3. Campo Correo electrónico (Opcional, max 100 chars)
     const emailInput = formEl.querySelector("#contacto-email");
     if (emailInput && emailInput.value.trim() !== "") {
-      if (!validarEmail(emailInput.value.trim())) {
+      const emailVal = emailInput.value.trim();
+      if (emailVal.length > 100 || !validarEmail(emailVal)) {
         setCampoError(emailInput, "El formato de correo electrónico no es válido.");
         esValido = false;
         if (!primerElementoInvalido) primerElementoInvalido = emailInput;
@@ -135,7 +167,7 @@ function inicializarFormularioContacto() {
       }
     }
 
-    // 5. Descripción detallada (Obligatorio, min 10 caracteres)
+    // 5. Descripción detallada (Obligatorio, 10 - 1000 caracteres)
     const descTextarea = formEl.querySelector("#contacto-mensaje");
     if (descTextarea) {
       const descVal = descTextarea.value.trim();
@@ -145,6 +177,10 @@ function inicializarFormularioContacto() {
         if (!primerElementoInvalido) primerElementoInvalido = descTextarea;
       } else if (descVal.length < 10) {
         setCampoError(descTextarea, "La descripción debe tener al menos 10 caracteres.");
+        esValido = false;
+        if (!primerElementoInvalido) primerElementoInvalido = descTextarea;
+      } else if (descVal.length > 1000) {
+        setCampoError(descTextarea, "La descripción no puede exceder los 1000 caracteres.");
         esValido = false;
         if (!primerElementoInvalido) primerElementoInvalido = descTextarea;
       }
@@ -164,12 +200,19 @@ function inicializarFormularioContacto() {
       return;
     }
 
-    // Si los datos son válidos, estructurar el mensaje para WhatsApp
-    const nombre = nombreInput.value.trim();
-    const tel = telInput.value.trim();
-    const email = emailInput && emailInput.value.trim() ? emailInput.value.trim() : "No especificado";
-    const tipo = tipoSelect.options[tipoSelect.selectedIndex].text;
-    const mensajeDesc = descTextarea.value.trim();
+    // CAPA DE SEGURIDAD 3: Sanitización profunda de entradas contra inyecciones y caracteres de control
+    const sanitizar = (str, max) => {
+      if (window.Security && typeof window.Security.sanitizeText === "function") {
+        return window.Security.sanitizeText(str, max);
+      }
+      return String(str || "").replace(/[<>]/g, "").trim().slice(0, max);
+    };
+
+    const nombre = sanitizar(nombreInput.value, 80);
+    const tel = sanitizar(telInput.value, 20);
+    const email = emailInput && emailInput.value.trim() ? sanitizar(emailInput.value, 100) : "No especificado";
+    const tipo = tipoSelect ? sanitizar(tipoSelect.options[tipoSelect.selectedIndex].text, 100) : "Servicio General";
+    const mensajeDesc = sanitizar(descTextarea.value, 1000);
 
     const mensajeWhatsApp = 
       `Hola ${window.WHATSAPP_CONFIG?.businessName || "TecnoFix Colombia"}, deseo radicar la siguiente consulta desde la web:\n\n` +
@@ -230,4 +273,8 @@ function inicializarFormularioContacto() {
 }
 
 // Exponer en el objeto global
+window.validarEmail = validarEmail;
+window.validarTelefono = validarTelefono;
+window.setCampoError = setCampoError;
+window.limpiarErroresFormulario = limpiarErroresFormulario;
 window.inicializarFormularioContacto = inicializarFormularioContacto;

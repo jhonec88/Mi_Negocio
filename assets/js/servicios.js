@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==========================================================================
  * MÓDULO DE SERVICIOS TÉCNICOS Y HERRAMIENTAS INTERACTIVAS
  * Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
@@ -470,6 +470,7 @@ function ejecutarDiagnostico(tipoProblema) {
 
 // Exponer en el objeto global
 window.SERVICIOS_DATA = SERVICIOS_DATA;
+window.GUIA_DIAGNOSTICO = GUIA_DIAGNOSTICO;
 window.renderizarServicios = renderizarServicios;
 window.mostrarDetalleServicio = mostrarDetalleServicio;
 window.ejecutarDiagnostico = ejecutarDiagnostico;

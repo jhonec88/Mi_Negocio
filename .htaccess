@@ -1,0 +1,59 @@
+# ==============================================================================
+# CONFIGURACIÓN DE SEGURIDAD Y HARDENING DE SERVIDOR WEB (APACHE / LITESPEED / CPANEL)
+# TecnoFix Colombia - Servicio Técnico y Tienda
+# ==============================================================================
+
+# 1. PREVENCIÓN DE NAVEGACIÓN DE DIRECTORIOS
+# Evita que atacantes listen el contenido de carpetas sin index.html
+Options -Indexes
+
+# 2. BLOQUEO DE ACCESO A ARCHIVOS SENSIBLES Y DE CONTROL DE VERSIONES
+<FilesMatch "(^\.git|^\.env|^\.htaccess|\.bak$|\.config$|\.log$)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bloquear acceso a scripts temporales y guías privadas desde el exterior
+<FilesMatch "(create_og_images\.ps1)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 3. CABECERAS DE SEGURIDAD HTTP AVANZADAS
+<IfModule mod_headers.c>
+    # Content-Security-Policy (CSP) estricta pero compatible con assets locales y WhatsApp
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self'; form-action 'self' https://wa.me; base-uri 'self'; upgrade-insecure-requests;"
+
+    # Prevenir ataques de suplantación de tipo MIME (MIME-sniffing)
+    Header set X-Content-Type-Options "nosniff"
+
+    # Prevenir Clickjacking e incrustación en iframes maliciosos
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Forzar navegación segura mediante HTTPS durante 1 año con subdominios (HSTS)
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Política de Referrer estricta (no expone rutas internas a dominios externos)
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Deshabilitar APIs invasivas del navegador (Permissions Policy)
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=(), accelerometer=()"
+
+    # Aislamiento de origen cruzado para prevenir fugas de contexto de ventana
+    Header set Cross-Origin-Opener-Policy "same-origin"
+
+    # Proteger recursos contra cargas no autorizadas desde otros orígenes
+    Header set Cross-Origin-Resource-Policy "same-origin"
+</IfModule>
+
+# 4. PREVENCIÓN DE INYECCIONES EN URL Y CONSULTAS MALICIOSAS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloquear peticiones con caracteres nulos o comandos sospechosos
+    RewriteCond %{QUERY_STRING} (%00|%0A|%0D|\<|\>|\'|\"|\.\./) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+</IfModule>
+
+# 5. CODIFICACIÓN DE CARACTERES PREDETERMINADA
+AddDefaultCharset UTF-8

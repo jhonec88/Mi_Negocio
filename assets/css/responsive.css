@@ -1,18 +1,70 @@
 /* ==========================================================================
-   DISEÑO RESPONSIVO (RESPONSIVE DESIGN)
-   Especificación Técnica Frontend: Servicio Técnico y Tienda Tecnológica
+   DISEÑO RESPONSIVO COMPLETO (RESPONSIVE DESIGN 100%)
+   TecnoFix Colombia — Sistema de breakpoints profesional
+   
+   Breakpoints:
+   - >= 1440px: Escritorios grandes (4K / UltraWide)
+   - 1280-1439px: Escritorios estándar (por defecto)
+   - 1024-1279px: Portátiles y tabletas horizontales
+   - 768-1023px:  Tabletas en vertical
+   - 480-767px:   Móviles grandes (landscape y phablets)
+   - 375-479px:   Móviles estándar
+   - < 375px:     Móviles pequeños (iPhone SE, Galaxy Fold)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   PORTÁTILES Y TABLETAS EN HORIZONTAL (Hasta 1023px)
+   TIPOGRAFÍA FLUIDA (Fluid Typography con clamp)
+   Escala suavemente entre viewport 320px y 1280px
    -------------------------------------------------------------------------- */
-@media (max-width: 1023px) {
-  :root {
-    --font-size-h1: 2.5rem;   /* 40px */
-    --font-size-h2: 2rem;     /* 32px */
-    --font-size-h3: 1.35rem;  /* 22px */
+:root {
+  --font-size-h1: clamp(1.75rem, 1.2rem + 2.5vw, 3rem);
+  --font-size-h2: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  --font-size-h3: clamp(1.2rem, 0.95rem + 1vw, 1.5rem);
+  --font-size-h4: clamp(1.1rem, 0.95rem + 0.5vw, 1.25rem);
+  --section-subtitle-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.125rem);
+}
+
+.section-subtitle {
+  font-size: var(--section-subtitle-size);
+}
+
+/* --------------------------------------------------------------------------
+   ESCRITORIOS GRANDES (1440px o más)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  .productos-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .container {
+    --container-padding: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PORTÁTILES Y TABLETAS EN HORIZONTAL (1024px a 1279px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1279px) and (min-width: 1024px) {
+  /* Grilla de productos a 3 columnas */
+  .productos-grid,
+  .grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .servicios-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: var(--spacing-6);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETAS EN HORIZONTAL / PORTÁTILES PEQUEÑOS (Hasta 1023px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
   /* Grilla de productos a 2 columnas */
   .productos-grid,
   .servicios-grid,
@@ -36,23 +88,58 @@
   .hero-actions {
     justify-content: center;
   }
+
+  /* Reducir padding de secciones */
+  .section {
+    padding-top: var(--spacing-12);
+    padding-bottom: var(--spacing-12);
+  }
 }
 
 /* --------------------------------------------------------------------------
-   TABLETAS Y DISPOSITIVOS MÓVILES (Hasta 767px)
+   TABLETAS EN VERTICAL (768px a 1023px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) and (min-width: 768px) {
+  /* grid-2 se mantiene como 2 cols en tablets */
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-6);
+  }
+
+  /* Pero en la página de contacto/nosotros donde se usa grid-2 
+     con contenido largo, forzamos 1 columna */
+  .grid-2[style*="align-items: start"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer se mantiene a 2 cols */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Barra de filtros de servicios */
+  .service-filter-btn {
+    font-size: var(--font-size-xs);
+    padding: 0.4rem 0.7rem;
+  }
+
+  /* Tarjeta flotante dentro del hero */
+  .hero-grid > div:last-child [style*="justify-content: space-between"] {
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   DISPOSITIVOS MÓVILES Y TABLETAS PEQUEÑAS (Hasta 767px)
    -------------------------------------------------------------------------- */
 @media (max-width: 767px) {
   :root {
-    /* Jerarquía móvil estricta según sección 3 y 5 */
-    --font-size-h1: 2rem;      /* 32px */
-    --font-size-h2: 1.625rem;  /* 26px */
-    --font-size-h3: 1.25rem;   /* 20px */
-    --font-size-body: 1rem;    /* 16px */
     --container-padding: 1rem;
-    --header-height: 68px;
+    --header-height: 64px;
   }
 
-  /* Menú de navegación móvil con cajón deslizable */
+  /* ---- MENÚ MÓVIL (Cajón deslizable) ---- */
   .menu-toggle-btn {
     display: inline-flex;
   }
@@ -63,12 +150,15 @@
     left: 0;
     width: 100%;
     height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height)); /* Dynamic viewport height */
     background-color: var(--color-bg-primary);
     border-top: 1px solid var(--color-border);
     flex-direction: column;
     align-items: stretch;
     padding: var(--spacing-6);
+    padding-bottom: env(safe-area-inset-bottom, var(--spacing-6));
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
     box-shadow: var(--shadow-xl);
@@ -88,8 +178,11 @@
 
   .nav-link {
     padding: 0.85rem 1rem;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     border-radius: var(--radius-md);
+    min-height: 44px; /* Touch target mínimo WCAG */
+    display: flex;
+    align-items: center;
   }
 
   .nav-link.active::after {
@@ -100,11 +193,32 @@
     background-color: var(--color-primary-light);
   }
 
+  /* Ocultar WhatsApp del header en móvil */
   .header-actions .btn-whatsapp-header {
     display: none;
   }
 
-  /* Columnas colapsadas a 1 columna */
+  /* ---- SECCIONES Y ESPACIADO ---- */
+  .section {
+    padding-top: var(--spacing-10);
+    padding-bottom: var(--spacing-10);
+  }
+
+  .section-sm {
+    padding-top: var(--spacing-6);
+    padding-bottom: var(--spacing-6);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-8);
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* ---- GRILLAS COLAPSADAS A 1 COLUMNA ---- */
   .productos-grid,
   .servicios-grid,
   .grid-2,
@@ -124,33 +238,9 @@
     text-align: center;
   }
 
-  /* Modales en móvil a pantalla casi completa */
-  .modal-container {
-    max-height: 95vh;
-    border-radius: var(--radius-lg);
-  }
-
-  .modal-header {
-    padding: var(--spacing-4);
-  }
-
-  .modal-body {
-    padding: var(--spacing-4);
-  }
-
-  .modal-footer {
-    padding: var(--spacing-4);
-    flex-direction: column-reverse;
-  }
-
-  .modal-footer .btn {
-    width: 100%;
-  }
-
-  /* Botones de acción en tarjetas */
-  .service-actions,
-  .product-actions {
-    grid-template-columns: 1fr;
+  /* ---- HERO SECTION ---- */
+  .hero-grid {
+    text-align: center;
   }
 
   .hero-actions {
@@ -160,9 +250,226 @@
 
   .hero-actions .btn {
     width: 100%;
+    justify-content: center;
   }
 
-  /* Botón de WhatsApp flotante más ajustado */
+  /* Indicadores de confianza del hero */
+  .section-hero .flex[style*="flex-wrap: wrap"][style*="border-top"] {
+    justify-content: center;
+  }
+
+  /* ---- TARJETAS DE SERVICIO ---- */
+  .service-card {
+    padding: var(--spacing-5);
+  }
+
+  .service-actions,
+  .product-actions {
+    grid-template-columns: 1fr;
+  }
+
+  /* ---- TARJETAS DE PRODUCTO ---- */
+  .product-card {
+    /* En pantallas pequeñas el hover con translateY no aplica */
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+
+  .product-body {
+    padding: var(--spacing-4);
+  }
+
+  .product-title {
+    font-size: 1rem;
+  }
+
+  /* ---- BARRA DE FILTROS DE PRODUCTOS ---- */
+  .section-sm [style*="display: flex"][style*="justify-content: space-between"][style*="margin-bottom: var(--spacing-6)"] {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  /* Filtros avanzados grid → stack vertical */
+  [style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-3);
+  }
+
+  /* Contador de resultados */
+  [style*="display: flex"][style*="justify-content: space-between"][style*="margin-top: var(--spacing-4)"] {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    text-align: center;
+  }
+
+  /* ---- FILTROS DE CATEGORÍA DE SERVICIOS (servicios.html) ---- */
+  .flex.justify-center.gap-2[style*="flex-wrap: wrap"][role="tablist"] {
+    gap: var(--spacing-2);
+  }
+
+  .service-filter-btn {
+    flex: 1 1 auto;
+    min-width: calc(50% - var(--spacing-2));
+    text-align: center;
+    font-size: var(--font-size-xs);
+    padding: 0.5rem 0.6rem;
+    min-height: 44px;
+  }
+
+  /* ---- MODALES ---- */
+  .modal-backdrop {
+    padding: var(--spacing-2);
+    align-items: flex-end;
+  }
+
+  .modal-container {
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-width: 100%;
+  }
+
+  .modal-header {
+    padding: var(--spacing-4);
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-body {
+    padding: var(--spacing-4);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-4);
+    flex-direction: column-reverse;
+    gap: var(--spacing-2);
+    padding-bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Tabla de especificaciones dentro del modal */
+  .specs-table {
+    font-size: var(--font-size-xs);
+  }
+
+  .specs-table th,
+  .specs-table td {
+    padding: 0.5rem 0.65rem;
+    font-size: var(--font-size-xs);
+  }
+
+  .specs-table th {
+    width: 45%;
+  }
+
+  /* ---- CARRITO (Cart Drawer) ---- */
+  .cart-drawer {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .cart-drawer-header {
+    padding: var(--spacing-4) var(--spacing-5);
+  }
+
+  .cart-drawer-body {
+    padding: var(--spacing-4) var(--spacing-5);
+  }
+
+  .cart-drawer-footer {
+    padding: var(--spacing-4) var(--spacing-5);
+    padding-bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cart-item-row {
+    gap: var(--spacing-2);
+  }
+
+  .cart-item-img-wrap {
+    width: 50px;
+    height: 50px;
+  }
+
+  .cart-item-title {
+    font-size: 0.85rem;
+  }
+
+  .cart-item-actions {
+    flex-wrap: wrap;
+  }
+
+  /* ---- TOAST NOTIFICATIONS ---- */
+  .toast-container {
+    top: auto;
+    bottom: calc(var(--spacing-4) + 60px); /* Por encima del WhatsApp float */
+    right: var(--spacing-4);
+    left: var(--spacing-4);
+    align-items: stretch;
+  }
+
+  .toast {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  /* ---- ACORDEÓN FAQ ---- */
+  .accordion-trigger {
+    padding: var(--spacing-4) var(--spacing-4);
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+
+  .accordion-content {
+    padding: 0 var(--spacing-4) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .accordion-item.is-active .accordion-content {
+    padding-top: var(--spacing-3);
+  }
+
+  /* ---- HERRAMIENTAS INTERACTIVAS (DIAGNÓSTICO) ---- */
+  .tool-box {
+    padding: var(--spacing-4);
+  }
+
+  .diagnostic-options {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-2);
+  }
+
+  .diagnostic-btn {
+    padding: var(--spacing-3);
+    min-height: 44px;
+  }
+
+  .diagnostic-result-box {
+    padding: var(--spacing-4);
+  }
+
+  /* ---- BEFORE/AFTER SLIDER ---- */
+  .before-after-wrapper {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Labels debajo del slider */
+  .flex.justify-between[style*="margin-top: var(--spacing-4)"][style*="font-size: 0.875rem"] {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    text-align: center;
+    font-size: var(--font-size-xs) !important;
+  }
+
+  /* ---- BOTONES FLOTANTES ---- */
   .whatsapp-float {
     bottom: var(--spacing-4);
     right: var(--spacing-4);
@@ -171,8 +478,8 @@
   }
 
   .whatsapp-float svg {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
 
   .whatsapp-tooltip {
@@ -186,7 +493,7 @@
     height: 42px;
   }
 
-  /* Formularios a ancho completo */
+  /* ---- FORMULARIOS ---- */
   .form-group {
     margin-bottom: var(--spacing-4);
   }
@@ -194,37 +501,517 @@
   .form-input,
   .form-select,
   .form-textarea {
-    font-size: 16px; /* Evita zoom automático en Safari iOS */
+    font-size: 16px; /* Prevenir zoom automático en iOS Safari */
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
   }
 
-  .tool-box {
-    padding: var(--spacing-4);
+  .form-label {
+    font-size: var(--font-size-xs);
+  }
+
+  /* ---- BOTONES EN GENERAL ---- */
+  .btn {
+    min-height: 44px;
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.35rem;
+    font-size: 1rem;
+  }
+
+  .btn-sm {
+    min-height: 40px;
+    padding: 0.45rem 0.75rem;
+  }
+
+  /* ---- PÁGINA CONTACTO: layout grid-2 con info + form ---- */
+  .grid-2[style*="align-items: start"] {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-6);
+  }
+
+  /* Formulario card */
+  [style*="border-radius: var(--radius-xl)"][style*="padding: var(--spacing-8)"][style*="box-shadow"] {
+    padding: var(--spacing-5) !important;
+  }
+
+  /* ---- RECOMENDADOR DE ACTUALIZACIONES ---- */
+  .grid-3[style*="gap: var(--spacing-4)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ---- CTA BANNER OSCURO ---- */
+  .section-bg-dark .flex.justify-center.gap-4 {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .section-bg-dark .flex.justify-center.gap-4 .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ---- HEADER acciones: reordenar para móvil ---- */
+  .header-actions {
+    gap: var(--spacing-2);
+  }
+
+  .btn-cart-toggle,
+  .theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .menu-toggle-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* ---- BRAND en móvil ---- */
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .brand-title {
+    font-size: 1.15rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.7rem;
+  }
+
+  /* ---- FOOTER en móvil ---- */
+  .site-footer {
+    padding-top: var(--spacing-10);
+    padding-bottom: calc(var(--spacing-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer-col h3 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-3);
+  }
+
+  .footer-links {
+    gap: var(--spacing-2);
+  }
+
+  .footer-links a {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
   }
 }
 
 /* --------------------------------------------------------------------------
-   MÓVILES PEQUEÑOS (320px a 374px)
+   MÓVILES MUY PEQUEÑOS — Modo compacto (Hasta 479px)
+   Ajustes adicionales para contenido que requiere 2 columnas mínimas
+   -------------------------------------------------------------------------- */
+@media (max-width: 479px) {
+  /* Productos grid forzar 1 columna incluso si JS intenta 2 */
+  .productos-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Filtros de servicios a full width stack */
+  .service-filter-btn {
+    min-width: 100%;
+  }
+
+  /* Tarjetas de producto: imagen más compacta */
+  .product-image-wrap {
+    aspect-ratio: 16 / 10;
+    padding: var(--spacing-3);
+  }
+
+  /* Service card inline styles override */
+  .service-card[style*="padding: var(--spacing-8)"] {
+    padding: var(--spacing-4) !important;
+  }
+
+  /* Valores y confianza cards */
+  .grid-4 > div[style*="padding: var(--spacing-6)"] {
+    padding: var(--spacing-4) !important;
+  }
+
+  /* Checkbox label */
+  .checkbox-label {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Modal compacto */
+  .modal-container {
+    max-height: 95vh;
+    max-height: 95dvh;
+  }
+
+  /* CTA oscuro: texto más pequeño */
+  .section-bg-dark h2 {
+    font-size: clamp(1.25rem, 1rem + 2vw, 2rem) !important;
+  }
+
+  .section-bg-dark p {
+    font-size: var(--font-size-sm) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MÓVILES MUY PEQUEÑOS (Hasta 374px) — iPhone SE, Galaxy Fold cerrado
    -------------------------------------------------------------------------- */
 @media (max-width: 374px) {
   :root {
-    --font-size-h1: 1.75rem; /* 28px */
     --container-padding: 0.75rem;
   }
 
   .brand-title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .brand-subtitle {
     display: none;
   }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Botones de acciones del header más compactos */
+  .btn-cart-toggle,
+  .theme-toggle-btn,
+  .menu-toggle-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  /* Botones adaptados */
+  .btn {
+    padding: 0.5rem 0.85rem;
+    font-size: var(--font-size-xs);
+  }
+
+  .btn-lg {
+    padding: 0.65rem 1rem;
+    font-size: var(--font-size-sm);
+  }
+
+  /* Service card extra compact */
+  .service-card {
+    padding: var(--spacing-4);
+  }
+
+  /* Accordion extra compact */
+  .accordion-trigger {
+    padding: var(--spacing-3);
+    font-size: 0.9rem;
+  }
+
+  /* Product price */
+  .product-price {
+    font-size: 1.1rem;
+  }
+
+  /* WhatsApp float más pequeño */
+  .whatsapp-float {
+    width: 46px;
+    height: 46px;
+    bottom: var(--spacing-3);
+    right: var(--spacing-3);
+  }
+
+  .whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .back-to-top {
+    width: 38px;
+    height: 38px;
+    bottom: var(--spacing-3);
+    left: var(--spacing-3);
+  }
+
+  /* Cart drawer compact */
+  .cart-drawer-title {
+    font-size: 1rem;
+  }
+
+  .cart-total-amount {
+    font-size: 1.15rem;
+  }
+
+  /* Footer compact */
+  .footer-bottom {
+    font-size: 0.65rem;
+  }
+
+  /* Diagnostic buttons */
+  .diagnostic-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-3);
+  }
+
+  .diagnostic-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
 }
 
 /* --------------------------------------------------------------------------
-   ESCRITORIOS GRANDES (1440px o más)
+   LANDSCAPE ORIENTATION EN MÓVILES (max-height: 500px y landscape)
+   Previene que elementos fixed bloqueen demasiado viewport
    -------------------------------------------------------------------------- */
-@media (min-width: 1440px) {
-  .productos-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 54px;
+  }
+
+  .site-header {
+    height: var(--header-height);
+  }
+
+  .main-nav {
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    padding: var(--spacing-3);
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.85rem;
+    font-size: var(--font-size-sm);
+    min-height: 36px;
+  }
+
+  .section {
+    padding-top: var(--spacing-6);
+    padding-bottom: var(--spacing-6);
+  }
+
+  .section-sm {
+    padding-top: var(--spacing-4);
+    padding-bottom: var(--spacing-4);
+  }
+
+  /* Modales en landscape */
+  .modal-backdrop {
+    align-items: center;
+    padding: var(--spacing-2);
+  }
+
+  .modal-container {
+    max-height: 90vh;
+    border-radius: var(--radius-lg);
+  }
+
+  /* WhatsApp float más discreto */
+  .whatsapp-float {
+    width: 44px;
+    height: 44px;
+    bottom: var(--spacing-2);
+    right: var(--spacing-2);
+  }
+
+  .whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .back-to-top {
+    width: 36px;
+    height: 36px;
+    bottom: var(--spacing-2);
+    left: var(--spacing-2);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   SAFE AREA INSETS (Notch / Dynamic Island — iOS & Android)
+   -------------------------------------------------------------------------- */
+@supports (padding: max(0px)) {
+  .site-header .container {
+    padding-left: max(var(--container-padding), env(safe-area-inset-left));
+    padding-right: max(var(--container-padding), env(safe-area-inset-right));
+  }
+
+  .site-footer .container {
+    padding-left: max(var(--container-padding), env(safe-area-inset-left));
+    padding-right: max(var(--container-padding), env(safe-area-inset-right));
+  }
+
+  .whatsapp-float {
+    right: max(var(--spacing-4), env(safe-area-inset-right));
+    bottom: max(var(--spacing-4), env(safe-area-inset-bottom));
+  }
+
+  .back-to-top {
+    left: max(var(--spacing-4), env(safe-area-inset-left));
+    bottom: max(var(--spacing-4), env(safe-area-inset-bottom));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   HOVER MEDIA QUERY — Solo aplica hover en dispositivos con puntero preciso
+   Desactiva transform hover en touch-only devices
+   -------------------------------------------------------------------------- */
+@media (hover: none) {
+  .service-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .service-card:hover::before {
+    opacity: 0;
+  }
+
+  .service-card:hover .service-icon-box {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    transform: none;
+  }
+
+  .product-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .product-card:hover .product-image-wrap img {
+    transform: none;
+  }
+
+  .diagnostic-btn:hover {
+    transform: none;
+  }
+
+  .btn:active {
+    transform: none;
+    opacity: 0.85;
+  }
+
+  .btn-cart-toggle:hover {
+    transform: none;
+  }
+
+  /* En touch, la animación de WhatsApp pulse se reduce */
+  .whatsapp-float {
+    animation-duration: 3s;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   FOCUS VISIBLE — Mejorar visibilidad del foco en móvil (accesibilidad)
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  :focus-visible {
+    outline-width: 2px;
+    outline-offset: 1px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PREFERENCIA DE CONTRASTE ALTO (Accesibilidad)
+   -------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  .btn {
+    border: 2px solid ButtonText;
+  }
+
+  .service-card,
+  .product-card,
+  .accordion-item {
+    border: 2px solid ButtonText;
+  }
+
+  .whatsapp-float {
+    border: 2px solid ButtonText;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PRINT STYLES — Para usuarios que imprimen páginas
+   -------------------------------------------------------------------------- */
+@media print {
+  .site-header,
+  .main-nav,
+  .header-actions,
+  .whatsapp-float,
+  .back-to-top,
+  .menu-toggle-btn,
+  .cart-drawer-backdrop,
+  .modal-backdrop,
+  .toast-container,
+  .btn-whatsapp,
+  .btn-cart-toggle,
+  .theme-toggle-btn,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 12pt;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .section {
+    padding: 1rem 0;
+    page-break-inside: avoid;
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .productos-grid,
+  .servicios-grid,
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem;
+  }
+
+  .service-card,
+  .product-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  a[href^="https://wa.me"]::after,
+  a[href^="javascript"]::after,
+  a[href^="#"]::after {
+    content: none;
+  }
+
+  .site-footer {
+    background-color: #fff;
+    color: #333;
+    border-top: 2px solid #000;
   }
 }

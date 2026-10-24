@@ -91,6 +91,30 @@ Al no requerir compilación, bundlers ni backend:
 
 ---
 
+## 🧪 Suite de Testing Automatizado
+
+El proyecto cuenta con un sistema completo de **Testing Automatizado** sin dependencias externas ni compiladores:
+
+1. **Dashboard Visual Interactivo en el Navegador**:
+   - Abre directamente el archivo `tests/index.html` con doble clic en cualquier navegador web.
+   - Ejecuta en tiempo real todas las suites de pruebas unitarias y de integración:
+     - 🛡️ **Seguridad Defensiva (`security.spec.js`)**: Prevención de XSS (`escapeHTML`), sanitización de URLs y texto, control de frecuencia (*Rate Limiting*) y validación de integridad anti-tampering del carrito.
+     - 🛒 **Carrito de Compras (`carrito.spec.js`)**: Adición, cálculo de totales en COP, actualización de cantidades, remoción automática, persistencia en `localStorage` y apertura/cierre accesible del Drawer.
+     - 💬 **Integración WhatsApp (`whatsapp.spec.js`)**: Validación de formato internacional colombiano (`+57`), codificación URI y mensajes estructurados para servicios y pedidos.
+     - 🔍 **Búsqueda y Filtros (`filtros.spec.js`)**: Búsqueda multicriterio, filtros por categoría, rango de precio, marca y algoritmos de ordenamiento nativos.
+     - 📋 **Formulario de Contacto (`formulario.spec.js`)**: Validación de email RFC, formato de teléfono colombiano móvil/fijo y trampa honeypot anti-spam.
+     - 📦 **Integridad de Datos (`data.spec.js`)**: Verificación de IDs únicos, existencia de imágenes locales y esquema de 16 productos y 12 servicios técnicos.
+     - 🎨 **Componentes UI y Accesibilidad (`ui-components.spec.js` & `integrity.spec.js`)**: Modales accesibles (WCAG 2.2 AA), alternador de tema claro/oscuro, acordeón FAQ y atributos `alt` en imágenes.
+
+2. **Ejecución desde Consola / CI (PowerShell)**:
+   - Puedes ejecutar la suite completa desde la terminal ejecutando:
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File tests\run-tests.ps1
+     ```
+   - Valida la integridad estática de los 6 documentos HTML, etiquetas SEO, metadatos estructurados JSON-LD, archivos CSS/JS/imágenes y ejecuta Microsoft Edge en modo headless.
+
+---
+
 ## ⚙️ Guía de Personalización Comercial
 
 Antes de publicar en producción, personaliza los siguientes archivos:
