@@ -19,6 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Página de Inicio (index.html) ---
   if (pagina === "index.html" || pagina === "") {
+    // Cargar secciones y banners dinámicos con imagen y texto encima
+    cargarSeccionesHome();
+    inicializarSincronizacionSeccionesHome();
+
     // Renderizar servicios destacados (primeros 4)
     if (window.SERVICIOS_DATA && typeof window.renderizarServicios === "function") {
       const destacados = window.SERVICIOS_DATA.filter(s => s.destacado).slice(0, 4);
@@ -76,9 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Página de Contacto (contacto.html) ---
   if (pagina === "contacto.html") {
+    cargarSeccionesHome();
+    inicializarSincronizacionSeccionesHome();
     if (typeof window.inicializarFormularioContacto === "function") {
       window.inicializarFormularioContacto();
     }
+  }
+
+  // --- Página de Nosotros (nosotros.html) ---
+  if (pagina === "nosotros.html") {
+    cargarSeccionesHome();
+    inicializarSincronizacionSeccionesHome();
   }
 
   // --- Página de Preguntas Frecuentes (preguntas-frecuentes.html) ---
@@ -235,3 +247,299 @@ function mostrarToast(mensaje, tipo = "info") {
 }
 
 window.mostrarToast = mostrarToast;
+
+
+/**
+ * --------------------------------------------------------------------------
+ * SECCIONES DINÁMICAS DE LA PÁGINA PRINCIPAL (IMÁGENES + TEXTO ENCIMA)
+ * --------------------------------------------------------------------------
+ */
+async function cargarSeccionesHome() {
+  const archivoActual = window.location.pathname.split("/").pop() || "index.html";
+  let paginaKey = "inicio";
+  let wrapperId = "secciones-dinamicas-home";
+  let gridId = "home-banners-grid";
+
+  if (archivoActual === "nosotros.html") {
+    paginaKey = "nosotros";
+    wrapperId = "secciones-dinamicas-nosotros";
+    gridId = "nosotros-banners-grid";
+  } else if (archivoActual === "contacto.html") {
+    paginaKey = "contacto";
+    wrapperId = "secciones-dinamicas-contacto";
+    gridId = "contacto-banners-grid";
+  }
+
+  const wrapper = document.getElementById(wrapperId);
+  const grid = document.getElementById(gridId);
+
+  try {
+    const response = await fetch(`/api/secciones-home?admin=true&pagina=${paginaKey}&t=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const todasLasSecciones = Array.isArray(data.secciones) ? data.secciones : [];
+
+    const escapeStr = (str) => {
+      if (typeof window.sanitizarTexto === "function") return window.sanitizarTexto(str);
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    };
+
+    const renderCustomOverlayBanner = (containerEl, sec, afterSelector) => {
+      let customBanner = containerEl.querySelector(".section-custom-uploaded-banner");
+      if (sec.imagen && sec.imagen.includes("uploads/")) {
+        const pos = ["izquierda", "centro", "derecha"].includes(sec.posicion_texto) ? sec.posicion_texto : "centro";
+        if (!customBanner) {
+          customBanner = document.createElement("div");
+          customBanner.className = "section-custom-uploaded-banner";
+          customBanner.style.marginTop = "1.5rem";
+          customBanner.style.marginBottom = "1.5rem";
+          const refEl = afterSelector ? containerEl.querySelector(afterSelector) : null;
+          if (refEl) {
+            refEl.insertAdjacentElement("afterend", customBanner);
+          } else {
+            containerEl.prepend(customBanner);
+          }
+        }
+        customBanner.innerHTML = `
+          <article class="home-banner-card">
+            <img src="${escapeStr(sec.imagen)}" alt="${escapeStr(sec.titulo)}" class="home-banner-bg" loading="lazy">
+            <div class="home-banner-overlay pos-${pos}">
+              <div class="home-banner-content">
+                ${sec.subtitulo ? `<span class="home-banner-tag">${escapeStr(sec.subtitulo)}</span>` : ""}
+                <h3 class="home-banner-title">${escapeStr(sec.titulo)}</h3>
+                <p class="home-banner-desc">${escapeStr(sec.descripcion)}</p>
+              </div>
+            </div>
+          </article>
+        `;
+      } else if (customBanner) {
+        customBanner.remove();
+      }
+    };
+
+    // 1. Evaluar todas las secciones existentes en el HTML actual ([data-home-section])
+    const mapaExistentes = new Map();
+    todasLasSecciones.forEach(s => {
+      if (s.clave_seccion) mapaExistentes.set(s.clave_seccion, s);
+    });
+
+    document.querySelectorAll("[data-home-section]").forEach(sectionEl => {
+      const clave = sectionEl.getAttribute("data-home-section");
+      const sec = mapaExistentes.get(clave);
+
+      // Si fue eliminada desde la Consola Administrativa o desactivada, ocultarla del frontend
+      if (!sec || !sec.activo) {
+        sectionEl.style.display = "none";
+        return;
+      }
+      sectionEl.style.display = "";
+
+      if (clave === "hero") {
+        const tagSpan = sectionEl.querySelector(".section-tag span");
+        if (tagSpan && sec.subtitulo !== undefined) tagSpan.textContent = sec.subtitulo;
+
+        const h1 = sectionEl.querySelector("h1");
+        if (h1 && sec.titulo) h1.textContent = sec.titulo;
+
+        const descP = sectionEl.querySelector("h1 + p");
+        if (descP && sec.descripcion) descP.textContent = sec.descripcion;
+
+        const primaryBtn = sectionEl.querySelector(".hero-actions a.btn-primary");
+        if (primaryBtn && sec.texto_boton) {
+          if (sec.enlace_boton) primaryBtn.setAttribute("href", sec.enlace_boton);
+          const svg = primaryBtn.querySelector("svg");
+          primaryBtn.textContent = " " + sec.texto_boton;
+          if (svg) primaryBtn.prepend(svg);
+        }
+
+        const heroImg = sectionEl.querySelector("img");
+        if (heroImg && sec.imagen) {
+          heroImg.src = sec.imagen.endsWith(".svg") ? `${sec.imagen}?v=2` : sec.imagen;
+          heroImg.alt = sec.titulo || heroImg.alt;
+        }
+      } else if (clave === "antes_despues" || clave === "nosotros_galeria") {
+        const tagEl = sectionEl.querySelector(".section-tag");
+        if (tagEl && sec.subtitulo !== undefined) tagEl.textContent = sec.subtitulo;
+
+        const titleEl = sectionEl.querySelector(".section-title");
+        if (titleEl && sec.titulo) titleEl.textContent = sec.titulo;
+
+        const subEl = sectionEl.querySelector(".section-subtitle");
+        if (subEl && sec.descripcion) subEl.textContent = sec.descripcion;
+
+        const imgAfter = sectionEl.querySelector(".ba-image-after");
+        if (imgAfter && sec.imagen) imgAfter.src = sec.imagen.endsWith(".svg") ? `${sec.imagen}?v=2` : sec.imagen;
+      } else if (clave === "cta_final") {
+        const h2 = sectionEl.querySelector("h2");
+        if (h2 && sec.titulo) h2.textContent = sec.titulo;
+
+        const p = sectionEl.querySelector("p");
+        if (p && sec.descripcion) p.textContent = sec.descripcion;
+
+        const outlineBtn = sectionEl.querySelector("a.btn-outline");
+        if (outlineBtn && sec.texto_boton) {
+          outlineBtn.textContent = sec.texto_boton;
+          if (sec.enlace_boton) outlineBtn.setAttribute("href", sec.enlace_boton);
+        }
+
+        if (sec.imagen && sec.imagen !== "assets/images/galeria/taller-1.svg") {
+          sectionEl.style.backgroundImage = `linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.92) 100%), url('${sec.imagen}')`;
+          sectionEl.style.backgroundSize = "cover";
+          sectionEl.style.backgroundPosition = "center";
+        } else {
+          sectionEl.style.backgroundImage = "";
+        }
+      } else if (clave === "nosotros_cabecera" || clave === "contacto_cabecera") {
+        const tagEl = sectionEl.querySelector(".section-tag");
+        if (tagEl && sec.subtitulo !== undefined) tagEl.textContent = sec.subtitulo;
+
+        const h1 = sectionEl.querySelector("h1");
+        if (h1 && sec.titulo) h1.textContent = sec.titulo;
+
+        const subEl = sectionEl.querySelector(".section-subtitle");
+        if (subEl && sec.descripcion) subEl.textContent = sec.descripcion;
+
+        renderCustomOverlayBanner(sectionEl.querySelector(".container") || sectionEl, sec, ".text-center");
+      } else if (clave === "nosotros_historia") {
+        const tagEl = sectionEl.querySelector(".section-tag");
+        if (tagEl && sec.subtitulo !== undefined) tagEl.textContent = sec.subtitulo;
+
+        const h2 = sectionEl.querySelector("h2");
+        if (h2 && sec.titulo) h2.textContent = sec.titulo;
+
+        const descP = sectionEl.querySelector(".nosotros-historia-desc") || sectionEl.querySelector("p");
+        if (descP && sec.descripcion) descP.textContent = sec.descripcion;
+
+        const outlineBtn = sectionEl.querySelector("a.btn-outline");
+        if (outlineBtn && sec.texto_boton) {
+          outlineBtn.textContent = sec.texto_boton;
+          if (sec.enlace_boton) outlineBtn.setAttribute("href", sec.enlace_boton);
+        }
+
+        const img = sectionEl.querySelector("img");
+        if (img && sec.imagen) {
+          img.src = sec.imagen.endsWith(".svg") ? `${sec.imagen}?v=2` : sec.imagen;
+          img.alt = sec.titulo || img.alt;
+        }
+      } else if (clave === "contacto_datos") {
+        const tagEl = sectionEl.querySelector(".section-tag");
+        if (tagEl && sec.subtitulo !== undefined) tagEl.textContent = sec.subtitulo;
+
+        const h2 = sectionEl.querySelector("h2");
+        if (h2 && sec.titulo) h2.textContent = sec.titulo;
+
+        const descP = sectionEl.querySelector(".contacto-datos-desc") || sectionEl.querySelector("p");
+        if (descP && sec.descripcion) descP.textContent = sec.descripcion;
+
+        renderCustomOverlayBanner(sectionEl, sec, ".contacto-datos-desc");
+      } else if (clave === "contacto_ubicacion") {
+        const titleEl = sectionEl.querySelector(".contacto-ubicacion-titulo");
+        if (titleEl && sec.titulo) titleEl.textContent = sec.titulo;
+
+        const addrEl = sectionEl.querySelector("#contacto-info-direccion-geo");
+        if (addrEl && sec.subtitulo) addrEl.textContent = sec.subtitulo;
+
+        const descEl = sectionEl.querySelector(".contacto-ubicacion-desc");
+        if (descEl && sec.descripcion) descEl.textContent = sec.descripcion;
+
+        renderCustomOverlayBanner(sectionEl, sec, null);
+      } else if (clave === "contacto_formulario") {
+        const titleEl = sectionEl.querySelector(".contacto-form-titulo") || sectionEl.querySelector("h3");
+        if (titleEl && sec.titulo) titleEl.textContent = sec.titulo;
+
+        const descEl = sectionEl.querySelector(".contacto-form-desc") || sectionEl.querySelector("p");
+        if (descEl && sec.descripcion) descEl.textContent = sec.descripcion;
+
+        const submitBtn = sectionEl.querySelector("button[type='submit']");
+        if (submitBtn && sec.texto_boton) {
+          const svg = submitBtn.querySelector("svg");
+          submitBtn.textContent = " " + sec.texto_boton;
+          if (svg) submitBtn.prepend(svg);
+        }
+
+        renderCustomOverlayBanner(sectionEl, sec, ".contacto-form-desc");
+      } else {
+        // Secciones estándar con .section-header (rutas, diagnostico, servicios_destacados, productos_destacados, valores, aeo_local, nosotros_valores, nosotros_testimonios)
+        const tagEl = sectionEl.querySelector(".section-header .section-tag");
+        if (tagEl && sec.subtitulo !== undefined) tagEl.textContent = sec.subtitulo;
+
+        const titleEl = sectionEl.querySelector(".section-header .section-title");
+        if (titleEl && sec.titulo) titleEl.textContent = sec.titulo;
+
+        const subEl = sectionEl.querySelector(".section-header .section-subtitle");
+        if (subEl && sec.descripcion) subEl.textContent = sec.descripcion;
+
+        renderCustomOverlayBanner(sectionEl, sec, ".section-header");
+      }
+    });
+
+    // 2. Renderizar las secciones nuevas adicionales (creadas con "+ Nueva Sección")
+    if (wrapper && grid) {
+      const seccionesNuevas = todasLasSecciones.filter(s => !s.clave_seccion && s.activo !== false);
+      if (seccionesNuevas.length === 0) {
+        wrapper.style.display = "none";
+        grid.innerHTML = "";
+      } else {
+        grid.innerHTML = seccionesNuevas.map(sec => {
+          const pos = ["izquierda", "centro", "derecha"].includes(sec.posicion_texto)
+            ? sec.posicion_texto
+            : "izquierda";
+          const imgUrl = sec.imagen || "assets/images/hero/hero-taller.svg";
+          const subHtml = sec.subtitulo
+            ? `<span class="home-banner-tag">${escapeStr(sec.subtitulo)}</span>`
+            : "";
+          const btnHtml = sec.texto_boton
+            ? `<a href="${escapeStr(sec.enlace_boton || "contacto.html")}" class="btn btn-primary">${escapeStr(sec.texto_boton)}</a>`
+            : "";
+
+          return `
+            <article class="home-banner-card">
+              <img src="${escapeStr(imgUrl)}" alt="${escapeStr(sec.titulo)}" class="home-banner-bg" loading="lazy" onerror="this.src='assets/images/hero/hero-taller.svg'">
+              <div class="home-banner-overlay pos-${pos}">
+                <div class="home-banner-content">
+                  ${subHtml}
+                  <h2 class="home-banner-title">${escapeStr(sec.titulo)}</h2>
+                  <p class="home-banner-desc">${escapeStr(sec.descripcion)}</p>
+                  ${btnHtml}
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+        wrapper.style.display = "block";
+      }
+    }
+  } catch (err) {
+    // En modo offline estático mantiene los textos originales del HTML
+  }
+}
+
+function inicializarSincronizacionSeccionesHome() {
+  if (typeof BroadcastChannel !== "undefined") {
+    try {
+      const canal = new BroadcastChannel("tecnofix_catalog_channel");
+      canal.addEventListener("message", (event) => {
+        if (event.data && (event.data.type === "secciones-home" || event.data.type === "todos")) {
+          cargarSeccionesHome();
+        }
+      });
+    } catch (e) {}
+  }
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "tecnofix_catalog_updated") {
+      cargarSeccionesHome();
+    }
+  });
+
+  window.addEventListener("focus", () => {
+    cargarSeccionesHome();
+  });
+}
+
+window.cargarSeccionesHome = cargarSeccionesHome;

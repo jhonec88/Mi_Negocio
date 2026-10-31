@@ -249,12 +249,30 @@ function inicializarFormularioContacto() {
       </button>
     `;
 
+    // Función auxiliar para registrar la solicitud en el backend si está activo
+    const registrarLeadBackend = () => {
+      try {
+        fetch('/api/contacto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            telefono: tel,
+            email: email !== 'No especificado' ? email : '',
+            tipo_solicitud: tipo,
+            mensaje: mensajeDesc,
+          }),
+        }).catch(() => {});
+      } catch (e) {}
+    };
+
     if (typeof window.abrirModal === "function") {
       window.abrirModal("Confirmación de Solicitud", modalConfirmacionBody, modalConfirmacionFooter);
       
       const btnConfirmar = document.getElementById("btn-confirmar-whatsapp");
       if (btnConfirmar) {
         btnConfirmar.addEventListener("click", () => {
+          registrarLeadBackend();
           if (typeof window.contactarWhatsApp === "function") {
             window.contactarWhatsApp(mensajeWhatsApp);
           }
@@ -266,6 +284,7 @@ function inicializarFormularioContacto() {
       }
     } else {
       // Alternativa si el modal no estuviera activo
+      registrarLeadBackend();
       window.contactarWhatsApp(mensajeWhatsApp);
       formEl.reset();
     }

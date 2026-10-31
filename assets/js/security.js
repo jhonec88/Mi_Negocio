@@ -1,7 +1,7 @@
 /**
  * ==========================================================================
  * MÓDULO DE SEGURIDAD DEFENSIVA (VANILLA JS)
- * TecnoFix Colombia - Seguridad en Capas Frontend
+ * JecTech Soluciones - Seguridad en Capas Frontend
  * ==========================================================================
  * 
  * Este módulo provee defensas activas contra:

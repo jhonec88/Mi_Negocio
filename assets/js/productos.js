@@ -213,8 +213,131 @@ function mostrarDetalleProducto(idProducto) {
   }, 50);
 }
 
+/**
+ * Sincroniza las opciones de filtros (categorías y marcas) con el catálogo real obtenido del backend
+ * @param {Array} productos - Lista de productos recibidos del servidor
+ */
+function sincronizarFiltrosConCatalogo(productos) {
+  if (!Array.isArray(productos)) return;
+
+  const selectCat = document.getElementById('filter-categoria');
+  if (selectCat) {
+    const valorSeleccionado = selectCat.value;
+    const categorias = Array.from(new Set(productos.map(p => p.categoria).filter(Boolean))).sort();
+    const categoriasExistentes = new Set(Array.from(selectCat.options).map(o => o.value));
+
+    categorias.forEach(cat => {
+      if (!categoriasExistentes.has(cat)) {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        selectCat.appendChild(opt);
+      }
+    });
+
+    if (valorSeleccionado && Array.from(selectCat.options).some(o => o.value === valorSeleccionado)) {
+      selectCat.value = valorSeleccionado;
+    }
+  }
+
+  const selectMarca = document.getElementById('filter-marca');
+  if (selectMarca) {
+    const valorSeleccionado = selectMarca.value;
+    const marcas = Array.from(new Set(productos.map(p => p.marca).filter(Boolean))).sort();
+    const marcasExistentes = new Set(Array.from(selectMarca.options).map(o => o.value.toLowerCase()));
+
+    marcas.forEach(marca => {
+      if (!marcasExistentes.has(marca.toLowerCase())) {
+        const opt = document.createElement('option');
+        opt.value = marca;
+        opt.textContent = marca;
+        selectMarca.appendChild(opt);
+      }
+    });
+
+    if (valorSeleccionado && Array.from(selectMarca.options).some(o => o.value.toLowerCase() === valorSeleccionado.toLowerCase())) {
+      selectMarca.value = valorSeleccionado;
+    }
+  }
+}
+
+/**
+ * Sincroniza dinámicamente el catálogo desde la API de PostgreSQL si el servidor está activo
+ */
+async function sincronizarProductosDesdeAPI() {
+  try {
+    const isLocalBackend = window.location.port === '3000' || window.location.origin.includes(':3000');
+    const apiBase = isLocalBackend ? '/api' : 'http://localhost:3000/api';
+    const res = await fetch(`${apiBase}/productos?_t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.ok && Array.isArray(data.productos)) {
+        window.PRODUCTOS_DATA = data.productos;
+
+        // 1. Si estamos en productos.html (grilla principal de productos)
+        const gridProductos = document.getElementById('productos-grid-container');
+        if (gridProductos) {
+          sincronizarFiltrosConCatalogo(data.productos);
+          if (typeof window.aplicarFiltros === 'function') {
+            window.aplicarFiltros();
+          } else if (typeof renderizarProductos === 'function') {
+            renderizarProductos(window.PRODUCTOS_DATA, 'productos-grid-container');
+          }
+        }
+
+        // 2. Si estamos en index.html (sección de productos destacados)
+        const gridDestacados = document.getElementById('productos-destacados-container');
+        if (gridDestacados && typeof renderizarProductos === 'function') {
+          const destacados = window.PRODUCTOS_DATA.filter(p => p.destacado);
+          renderizarProductos(destacados.length > 0 ? destacados.slice(0, 4) : window.PRODUCTOS_DATA.slice(0, 4), 'productos-destacados-container');
+        }
+
+        // 3. Notificar actualización a otros componentes (p. ej. carrito)
+        window.dispatchEvent(new CustomEvent('tecnofix:productos-actualizados', { detail: { productos: window.PRODUCTOS_DATA } }));
+      }
+    }
+  } catch (e) {
+    // Modo estático o sin servidor: continúa con PRODUCTOS_DATA local
+  }
+}
+
+// Inicialización y reactividad automática
+document.addEventListener('DOMContentLoaded', sincronizarProductosDesdeAPI);
+
+// Reactividad al cambiar de pestaña o volver al foco
+window.addEventListener('focus', sincronizarProductosDesdeAPI);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    sincronizarProductosDesdeAPI();
+  }
+});
+
+// Reactividad entre pestañas mediante BroadcastChannel y StorageEvent
+if (typeof window.BroadcastChannel === 'function') {
+  try {
+    const canalCatalogo = new BroadcastChannel('tecnofix_catalog_channel');
+    canalCatalogo.onmessage = (e) => {
+      if (e.data && (e.data.type === 'productos' || e.data.type === 'todos')) {
+        sincronizarProductosDesdeAPI();
+      }
+    };
+  } catch (err) {}
+}
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'tecnofix_catalog_updated') {
+    sincronizarProductosDesdeAPI();
+  }
+});
+
 // Exponer en el objeto global
 window.formatearPrecioCOP = formatearPrecioCOP;
 window.obtenerBadgeDisponibilidad = obtenerBadgeDisponibilidad;
 window.renderizarProductos = renderizarProductos;
 window.mostrarDetalleProducto = mostrarDetalleProducto;
+window.sincronizarProductosDesdeAPI = sincronizarProductosDesdeAPI;
+

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consola de Administración | JecTech Soluciones</title>
+  <link rel="icon" type="image/png" href="/assets/images/logo-jectech.png">
+  <link rel="stylesheet" href="/consola/admin.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. PANTALLA DE INICIO DE SESIÓN (LOGIN)
+       ======================================================================== -->
+  <div id="login-view" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">
+          <img src="/assets/images/logo-jectech.png" alt="Logo JecTech Soluciones" style="width: 58px; height: 58px; object-fit: contain;">
+          <span>JecTech Soluciones</span>
+        </div>
+        <h1 style="font-size: 1.35rem; margin-bottom: 0.35rem;">Consola Administrativa</h1>
+        <p class="login-subtitle">Ingresa tus credenciales con privilegios para gestionar el sitio</p>
+      </div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Correo Electrónico</label>
+          <input type="email" id="login-email" class="form-control" placeholder="admin@jectech.com.co" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="btn-login-submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          Acceder a la Consola
+        </button>
+
+        <div style="margin-top: 1.5rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+          Acceso protegido con cifrado bcrypt y autenticación JWT
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       2. ESTRUCTURA PRINCIPAL DE LA CONSOLA (BARRA LATERAL IZQUIERDA + CONTENIDO)
+       ======================================================================== -->
+  <div id="admin-app" class="app-layout" style="display: none;">
+    
+    <!-- BARRA LATERAL IZQUIERDA (SIDEBAR) -->
+    <aside class="sidebar" id="sidebar">
+      
+      <div class="sidebar-header">
+        <a href="/consola" class="sidebar-brand">
+          <img src="/assets/images/logo-jectech.png" alt="Logo JecTech Soluciones" style="width: 36px; height: 36px; object-fit: contain;">
+          <span>JecTech</span>
+          <span class="brand-badge">Admin</span>
+        </a>
+        <button type="button" class="sidebar-close-btn" id="btn-close-sidebar" aria-label="Cerrar barra lateral">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Menú de Elementos a la Izquierda -->
+      <ul class="sidebar-menu">
+        <li class="menu-section-title">Principal</li>
+        <li class="nav-item">
+          <a class="nav-link active" data-section="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="menu-section-title">Contenido Web</li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="secciones-home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            <span>Página Principal (Inicio)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="secciones-nosotros">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>Nosotros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="secciones-contacto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Contacto</span>
+          </a>
+        </li>
+
+        <li class="menu-section-title">Gestión de Catálogo</li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="productos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <span>Productos & Stock</span>
+            <span class="nav-badge" id="badge-total-productos">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="servicios">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            <span>Servicios Técnicos</span>
+          </a>
+        </li>
+
+        <li class="menu-section-title">Atención al Cliente</li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="contacto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Cotizaciones & Leads</span>
+            <span class="nav-badge" id="badge-mensajes-nuevos" style="background-color: var(--warning); display: none;">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="faqs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span>Preguntas Frecuentes</span>
+          </a>
+        </li>
+
+        <li class="menu-section-title">Sistema</li>
+        <li class="nav-item">
+          <a class="nav-link" data-section="config">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Configuración General</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/" target="_blank" class="nav-link" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Ver Tienda Pública</span>
+          </a>
+        </li>
+        <li class="nav-item" style="margin-top: 1rem;">
+          <a class="nav-link" id="btn-logout" style="color: var(--danger);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Cerrar Sesión</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Perfil de Usuario en el Sidebar -->
+      <div class="sidebar-footer">
+        <div class="user-profile-widget">
+          <div class="user-avatar" id="sidebar-user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-user-name">Administrador</div>
+            <div class="user-role" id="sidebar-user-email">admin@tecnofix.com.co</div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ÁREA DE CONTENIDO PRINCIPAL -->
+    <main class="main-wrapper">
+      
+      <!-- HEADER SUPERIOR -->
+      <header class="top-header">
+        <div class="header-left">
+          <button type="button" class="mobile-toggle-btn" id="btn-toggle-sidebar" aria-label="Abrir menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title" id="page-title">Dashboard</h2>
+        </div>
+
+        <div class="header-actions" id="header-dynamic-actions">
+          <!-- Botones de acción contextuales según la pestaña activa -->
+        </div>
+      </header>
+
+      <!-- CONTENEDOR DE PÁGINAS -->
+      <div class="page-container">
+
+        <!-- ====================================================================
+             SECCIÓN 1: DASHBOARD / MÉTRICAS
+             ==================================================================== -->
+        <section id="section-dashboard" class="content-section active">
+          
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+              </div>
+              <div>
+                <div class="stat-value" id="stat-total-productos">0</div>
+                <div class="stat-label">Productos Activos</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon accent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+              </div>
+              <div>
+                <div class="stat-value" id="stat-total-servicios">0</div>
+                <div class="stat-label">Servicios Técnicos</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              </div>
+              <div>
+                <div class="stat-value" id="stat-mensajes-nuevos">0</div>
+                <div class="stat-label">Cotizaciones Nuevas</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+              <div>
+                <div class="stat-value" id="stat-stock-bajo">0</div>
+                <div class="stat-label">Alerta Stock Crítico</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dos Paneles: Solicitudes Recientes y Stock Crítico -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem;">
+            
+            <div class="panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Últimas Solicitudes y Cotizaciones</h3>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="navegarA('contacto')">Ver todas</button>
+              </div>
+              <div class="panel-body" style="padding: 0;">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Solicitud</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-dashboard-mensajes">
+                      <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Cargando...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Productos con Menor Stock</h3>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="navegarA('productos')">Inventario</button>
+              </div>
+              <div class="panel-body" style="padding: 0;">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Precio COP</th>
+                        <th>Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-dashboard-stock">
+                      <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Cargando...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 2: PRODUCTOS E INVENTARIO
+             ==================================================================== -->
+        <section id="section-productos" class="content-section">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; flex: 1;">
+                <input type="text" id="filtro-busqueda-producto" class="form-control" placeholder="Buscar por nombre o marca..." style="max-width: 280px;">
+                <select id="filtro-categoria-producto" class="form-control" style="max-width: 200px;">
+                  <option value="todos">Todas las categorías</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-nuevo-producto">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Nuevo Producto
+              </button>
+            </div>
+
+            <div class="panel-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Producto</th>
+                      <th>Categoría</th>
+                      <th>Precio (COP)</th>
+                      <th>Stock</th>
+                      <th>Estado</th>
+                      <th>Destacado</th>
+                      <th style="text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-productos">
+                    <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Cargando catálogo...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 3: SERVICIOS TÉCNICOS
+             ==================================================================== -->
+        <section id="section-servicios" class="content-section">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Catálogo de Servicios Especializados</h3>
+              <button type="button" class="btn btn-primary" id="btn-nuevo-servicio">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Nuevo Servicio
+              </button>
+            </div>
+
+            <div class="panel-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nombre del Servicio</th>
+                      <th>Categoría</th>
+                      <th>Tiempo Estimado</th>
+                      <th>Precio Referencia</th>
+                      <th>Destacado</th>
+                      <th style="text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-servicios">
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando servicios...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 4: COTIZACIONES Y MENSAJES (LEADS)
+             ==================================================================== -->
+        <section id="section-contacto" class="content-section">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="panel-title">Solicitudes de Clientes</span>
+                <select id="filtro-estado-contacto" class="form-control" style="max-width: 170px;">
+                  <option value="todos">Todos los estados</option>
+                  <option value="nuevo">Nuevos</option>
+                  <option value="en_gestion">En Gestión</option>
+                  <option value="atendido">Atendidos</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="panel-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Cliente</th>
+                      <th>Teléfono</th>
+                      <th>Tipo Solicitud</th>
+                      <th>Mensaje / Caso</th>
+                      <th>Estado</th>
+                      <th style="text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-contacto">
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando solicitudes...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 5: PREGUNTAS FRECUENTES (FAQ)
+             ==================================================================== -->
+        <section id="section-faqs" class="content-section">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Base de Conocimiento y Respuestas AEO</h3>
+              <button type="button" class="btn btn-primary" id="btn-nueva-faq">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Nueva Pregunta
+              </button>
+            </div>
+
+            <div class="panel-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Orden</th>
+                      <th>Pregunta</th>
+                      <th>Categoría</th>
+                      <th>Respuesta Resumen</th>
+                      <th style="text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-faqs">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Cargando preguntas frecuentes...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 7: PÁGINA PRINCIPAL (SECCIONES Y BANNERS CON TEXTO ENCIMA)
+             ==================================================================== -->
+        <section id="section-secciones-home" class="content-section">
+          
+          <div class="panel">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 class="panel-title" id="secciones-web-panel-title">Secciones y Banners de la Página Principal</h3>
+                <p id="secciones-web-panel-desc" style="margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--text-muted);">
+                  Edita o elimina las secciones existentes, o agrega nuevas con imágenes desde tu computador y texto encima.
+                </p>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-nueva-seccion-home">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span id="btn-nueva-seccion-label">Nueva Sección en Inicio</span>
+              </button>
+            </div>
+
+            <div class="panel-body" style="padding: 0;">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Orden</th>
+                      <th>Vista Previa (Imagen + Texto)</th>
+                      <th>Título y Subtítulo</th>
+                      <th>Descripción sobre la Imagen</th>
+                      <th>Posición Texto</th>
+                      <th>Estado</th>
+                      <th style="text-align: right;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-secciones-home">
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando secciones de la página principal...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             SECCIÓN 6: CONFIGURACIÓN GENERAL
+             ==================================================================== -->
+        <section id="section-config" class="content-section">
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+            
+            <div class="panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Datos Comerciales del Negocio</h3>
+              </div>
+              <div class="panel-body">
+                <form id="form-config-business">
+                  <div class="form-group">
+                    <label class="form-label" for="cfg-business-name">Nombre Comercial</label>
+                    <input type="text" id="cfg-business-name" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="cfg-whatsapp-phone">Número Oficial de WhatsApp</label>
+                    <input type="text" id="cfg-whatsapp-phone" class="form-control" placeholder="573001234567" required>
+                    <small style="color: var(--text-dim); display: block; margin-top: 0.25rem;">Formato internacional sin signos (ej. 573001234567).</small>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="cfg-email-contacto">Correo Electrónico de Contacto</label>
+                    <input type="email" id="cfg-email-contacto" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="cfg-direccion-taller">Dirección del Taller Principal</label>
+                    <input type="text" id="cfg-direccion-taller" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="cfg-horario-atencion">Horario de Atención</label>
+                    <input type="text" id="cfg-horario-atencion" class="form-control" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Guardar Datos Comerciales</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Seguridad de Acceso (Cambiar Contraseña)</h3>
+              </div>
+              <div class="panel-body">
+                <form id="form-change-password">
+                  <div class="form-group">
+                    <label class="form-label" for="pwd-actual">Contraseña Actual</label>
+                    <input type="password" id="pwd-actual" class="form-control" required autocomplete="current-password">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pwd-nueva">Nueva Contraseña</label>
+                    <input type="password" id="pwd-nueva" class="form-control" required minlength="8" autocomplete="new-password">
+                    <small style="color: var(--text-dim); display: block; margin-top: 0.25rem;">Mínimo 8 caracteres combinando números y letras.</small>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pwd-confirmar">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="pwd-confirmar" class="form-control" required minlength="8" autocomplete="new-password">
+                  </div>
+                  <button type="submit" class="btn btn-secondary">Actualizar Contraseña</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ========================================================================
+       MODALES DE GESTIÓN (PRODUCTOS, SERVICIOS, FAQS, LEADS)
+       ======================================================================== -->
+  
+  <!-- MODAL: PRODUCTO (CREAR / EDITAR) -->
+  <div class="modal-backdrop" id="modal-producto">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-producto-title">Crear Producto</h3>
+        <button type="button" class="btn-icon" onclick="cerrarModal('modal-producto')">✕</button>
+      </div>
+      <form id="form-producto">
+        <input type="hidden" id="prod-id">
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label" for="prod-nombre">Nombre del Producto *</label>
+              <input type="text" id="prod-nombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prod-categoria">Categoría *</label>
+              <input type="text" id="prod-categoria" class="form-control" placeholder="Ej. SSD y almacenamiento" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prod-marca">Marca *</label>
+              <input type="text" id="prod-marca" class="form-control" placeholder="Ej. Kingston" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prod-precio">Precio COP *</label>
+              <input type="number" id="prod-precio" class="form-control" placeholder="145000" required min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prod-stock">Stock Disponible</label>
+              <input type="number" id="prod-stock" class="form-control" value="10" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prod-disponible">Estado de Disponibilidad</label>
+              <select id="prod-disponible" class="form-control">
+                <option value="disponible">Disponible</option>
+                <option value="agotado">Agotado</option>
+                <option value="consultar">Consultar Existencias</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Imagen del Producto *</label>
+              <div class="image-upload-wrapper">
+                <!-- Zona interactiva para seleccionar archivo del dispositivo -->
+                <div class="image-dropzone" id="prod-dropzone">
+                  <svg class="image-dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <div class="image-dropzone-title">Haz clic o arrastra una imagen desde tu dispositivo</div>
+                  <div class="image-dropzone-hint">Formatos soportados: JPG, PNG, WEBP, SVG o GIF (Máx. 10 MB)</div>
+                </div>
+                
+                <!-- Input oculto para escoger archivo local del dispositivo -->
+                <input type="file" id="prod-file-input" accept="image/png, image/jpeg, image/webp, image/svg+xml, image/gif" style="display: none;">
+
+                <!-- Vista previa de la imagen seleccionada -->
+                <div class="image-preview-box" id="prod-preview-box" style="display: none;">
+                  <img src="assets/images/productos/placeholder-tech.svg" id="prod-preview-img" class="image-preview-thumb" alt="Vista previa del producto">
+                  <div class="image-preview-info">
+                    <div class="image-preview-name" id="prod-preview-name">placeholder-tech.svg</div>
+                    <div class="image-preview-status">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      <span id="prod-preview-status-text">Imagen lista</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-prod-change-image">Cambiar</button>
+                  <button type="button" class="image-preview-remove" id="btn-prod-remove-image" title="Restablecer imagen por defecto">✕</button>
+                </div>
+
+                <!-- Campo con la ruta final guardada -->
+                <input type="hidden" id="prod-imagen" value="assets/images/productos/placeholder-tech.svg">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="prod-descripcion">Descripción Comercial</label>
+            <textarea id="prod-descripcion" class="form-control" rows="3" placeholder="Descripción atractiva para el cliente"></textarea>
+          </div>
+
+          <!-- FICHA TÉCNICA Y ESPECIFICACIONES -->
+          <div class="form-group specs-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <div>
+                <label class="form-label" style="margin-bottom: 0.15rem; font-weight: 700;">Ficha Técnica y Especificaciones</label>
+                <small style="color: var(--text-muted); display: block; font-size: 0.78rem;">Parámetros técnicos detallados (ej. Capacidad, Interfaz, Garantía, etc.)</small>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-spec">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                + Agregar fila
+              </button>
+            </div>
+            
+            <div id="specs-container" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Filas dinámicas de característica / valor generadas por JavaScript -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="prod-destacado">
+              <span class="form-label" style="margin-bottom: 0;">Destacar este producto en la página de inicio</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-producto')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SERVICIO (CREAR / EDITAR) -->
+  <div class="modal-backdrop" id="modal-servicio">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-servicio-title">Crear Servicio Técnico</h3>
+        <button type="button" class="btn-icon" onclick="cerrarModal('modal-servicio')">✕</button>
+      </div>
+      <form id="form-servicio">
+        <input type="hidden" id="serv-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="serv-nombre">Nombre del Servicio *</label>
+            <input type="text" id="serv-nombre" class="form-control" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="serv-categoria">Categoría *</label>
+              <select id="serv-categoria" class="form-control">
+                <option value="mantenimiento">Mantenimiento</option>
+                <option value="hardware">Hardware</option>
+                <option value="actualizacion">Actualización</option>
+                <option value="software">Software</option>
+                <option value="redes">Redes y Conectividad</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="serv-tiempo">Tiempo Estimado</label>
+              <input type="text" id="serv-tiempo" class="form-control" placeholder="Ej. 2 a 4 horas">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label" for="serv-precio">Precio Referencial</label>
+              <input type="text" id="serv-precio" class="form-control" placeholder="Ej. Desde $60.000 COP">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Icono o Imagen del Servicio</label>
+              <div class="image-upload-wrapper">
+                <div class="image-dropzone" id="serv-dropzone">
+                  <svg class="image-dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <div class="image-dropzone-title">Haz clic o arrastra una imagen/icono desde tu dispositivo</div>
+                  <div class="image-dropzone-hint">Formatos soportados: PNG, WEBP, SVG o JPG (Máx. 10 MB)</div>
+                </div>
+                
+                <input type="file" id="serv-file-input" accept="image/png, image/jpeg, image/webp, image/svg+xml, image/gif" style="display: none;">
+
+                <div class="image-preview-box" id="serv-preview-box" style="display: none;">
+                  <img src="" id="serv-preview-img" class="image-preview-thumb" alt="Vista previa del servicio">
+                  <div class="image-preview-info">
+                    <div class="image-preview-name" id="serv-preview-name">icono.png</div>
+                    <div class="image-preview-status">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      <span id="serv-preview-status-text">Icono listo</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-serv-change-image">Cambiar</button>
+                  <button type="button" class="image-preview-remove" id="btn-serv-remove-image" title="Quitar imagen personalizada">✕</button>
+                </div>
+
+                <input type="hidden" id="serv-icono" value="">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="serv-descripcion">Descripción Detallada *</label>
+            <textarea id="serv-descripcion" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="serv-equipos">Equipos Compatibles</label>
+            <input type="text" id="serv-equipos" class="form-control" placeholder="Portátiles de todas las marcas y torres">
+          </div>
+
+          <!-- ¿QUÉ INCLUYE ESTE SERVICIO TÉCNICO? -->
+          <div class="form-group specs-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <div>
+                <label class="form-label" style="margin-bottom: 0.15rem; font-weight: 700;">¿Qué incluye este servicio técnico?</label>
+                <small style="color: var(--text-muted); display: block; font-size: 0.78rem;">Ítems con chulito verde (✓) que se muestran en el detalle del servicio técnico</small>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-tarea-servicio">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                + Agregar fila
+              </button>
+            </div>
+            
+            <div id="serv-tareas-container" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Filas dinámicas de ítems incluidos generadas por JavaScript -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="serv-destacado">
+              <span class="form-label" style="margin-bottom: 0;">Destacar en la portada principal</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-servicio')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Servicio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: FAQ (CREAR / EDITAR) -->
+  <div class="modal-backdrop" id="modal-faq">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-faq-title">Crear Pregunta Frecuente</h3>
+        <button type="button" class="btn-icon" onclick="cerrarModal('modal-faq')">✕</button>
+      </div>
+      <form id="form-faq">
+        <input type="hidden" id="faq-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="faq-pregunta">Pregunta *</label>
+            <input type="text" id="faq-pregunta" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="faq-categoria">Categoría</label>
+            <input type="text" id="faq-categoria" class="form-control" placeholder="Ej. Garantías, Precios">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="faq-respuesta">Respuesta *</label>
+            <textarea id="faq-respuesta" class="form-control" rows="4" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-faq')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Pregunta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SECCIÓN PÁGINA PRINCIPAL (CREAR / EDITAR) -->
+  <div class="modal-backdrop" id="modal-seccion-home">
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3 id="modal-seccion-home-title">Nueva Sección en Página Principal</h3>
+        <button type="button" class="btn-icon" onclick="cerrarModal('modal-seccion-home')">✕</button>
+      </div>
+      <form id="form-seccion-home">
+        <input type="hidden" id="sec-id">
+        <input type="hidden" id="sec-pagina" value="inicio">
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label" for="sec-titulo">Título Principal (Encima de la imagen) *</label>
+              <input type="text" id="sec-titulo" class="form-control" placeholder="Ej. Laboratorio Especializado en Microelectrónica" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sec-subtitulo">Etiqueta / Subtítulo Superior</label>
+              <input type="text" id="sec-subtitulo" class="form-control" placeholder="Ej. Tecnología y Precisión">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sec-posicion">Posición del Texto sobre la Imagen</label>
+              <select id="sec-posicion" class="form-control">
+                <option value="izquierda">Alineado a la Izquierda</option>
+                <option value="centro">Centrado en la Imagen</option>
+                <option value="derecha">Alineado a la Derecha</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label" for="sec-descripcion">Texto / Descripción encima de la Imagen *</label>
+              <textarea id="sec-descripcion" class="form-control" rows="3" placeholder="Escribe la descripción detallada que aparecerá superpuesta sobre la imagen..." required></textarea>
+            </div>
+
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Imagen de Fondo de la Sección (Desde tu computador) *</label>
+              <div class="image-upload-wrapper">
+                <div class="image-dropzone" id="sec-dropzone">
+                  <svg class="image-dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <div class="image-dropzone-title">Haz clic o arrastra una imagen desde tu computador</div>
+                  <div class="image-dropzone-hint">Formatos soportados: JPG, PNG, WEBP, SVG o GIF (Máx. 10 MB)</div>
+                </div>
+                
+                <input type="file" id="sec-file-input" accept="image/png, image/jpeg, image/webp, image/svg+xml, image/gif" style="display: none;">
+
+                <div class="image-preview-box" id="sec-preview-box" style="display: none;">
+                  <img src="assets/images/hero/hero-taller.svg" id="sec-preview-img" class="image-preview-thumb" alt="Vista previa de la sección">
+                  <div class="image-preview-info">
+                    <div class="image-preview-name" id="sec-preview-name">hero-taller.svg</div>
+                    <div class="image-preview-status">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      <span id="sec-preview-status-text">Imagen lista</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-sec-change-image">Cambiar</button>
+                  <button type="button" class="image-preview-remove" id="btn-sec-remove-image" title="Restablecer imagen por defecto">✕</button>
+                </div>
+
+                <input type="hidden" id="sec-imagen" value="assets/images/hero/hero-taller.svg">
+              </div>
+            </div>
+
+            <!-- VISTA PREVIA EN VIVO CON EL TEXTO ENCIMA DE LA IMAGEN -->
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Vista Previa en Vivo (Cómo se verá en la Página Principal)</label>
+              <div class="admin-banner-live-preview" id="sec-live-preview-card">
+                <img src="/assets/images/hero/hero-taller.svg" id="sec-live-preview-bg" class="admin-banner-live-bg" alt="Fondo preview">
+                <div class="admin-banner-live-overlay pos-izquierda" id="sec-live-preview-overlay">
+                  <div class="admin-banner-live-content">
+                    <span class="admin-banner-live-tag" id="sec-live-preview-sub">Tecnología y Precisión</span>
+                    <h4 class="admin-banner-live-title" id="sec-live-preview-title">Título de tu sección aquí</h4>
+                    <p class="admin-banner-live-desc" id="sec-live-preview-desc">Aquí se verá el texto descriptivo superpuesto directamente encima de la imagen seleccionada.</p>
+                    <span class="admin-banner-live-btn" id="sec-live-preview-btn">Más Información</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sec-texto-boton">Texto del Botón (Opcional)</label>
+              <input type="text" id="sec-texto-boton" class="form-control" placeholder="Ej. Ver Catálogo / Cotizar Ahora" value="Más Información">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sec-enlace-boton">Enlace del Botón</label>
+              <select id="sec-enlace-boton" class="form-control">
+                <option value="contacto.html">Página de Contacto / Cotizaciones</option>
+                <option value="servicios.html">Catálogo de Servicios Técnicos</option>
+                <option value="productos.html">Tienda de Repuestos y Productos</option>
+                <option value="nosotros.html">Sobre Nosotros</option>
+                <option value="faq.html">Preguntas Frecuentes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sec-orden">Orden de Aparición</label>
+              <input type="number" id="sec-orden" class="form-control" value="1" min="0">
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; padding-top: 1.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="sec-activo" checked>
+                <span class="form-label" style="margin-bottom: 0;">Sección visible en la página principal</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-seccion-home')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Sección</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR DE TOASTS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPT ADMINISTRATIVO -->
+  <script src="/consola/admin.js"></script>
+</body>
+</html>

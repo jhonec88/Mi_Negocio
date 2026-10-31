@@ -5,7 +5,7 @@
  * ==========================================================================
  */
 
-const SERVICIOS_DATA = [
+let SERVICIOS_DATA = [
   {
     id: 1,
     nombre: "Mantenimiento Preventivo",
@@ -297,16 +297,30 @@ function renderizarServicios(servicios, contenedorId) {
     return;
   }
 
-  contenedor.innerHTML = servicios.map(s => `
+  contenedor.innerHTML = servicios.map(s => {
+    const iconoRenderizado = (s.icono && s.icono.trim().startsWith('<'))
+      ? s.icono
+      : (s.icono
+          ? `<img src="${s.icono}" alt="${s.nombre}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.onerror=null; this.src='assets/images/productos/placeholder-tech.svg';">`
+          : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>`);
+
+    const tareasList = Array.isArray(s.tareas_incluidas)
+      ? s.tareas_incluidas
+      : (Array.isArray(s.tareasIncluidas) ? s.tareasIncluidas : []);
+    const beneficiosList = (Array.isArray(s.beneficios) && s.beneficios.length > 0)
+      ? s.beneficios
+      : tareasList.slice(0, 3);
+
+    return `
     <article class="service-card" data-service-id="${s.id}">
       <div class="service-icon-box" aria-hidden="true">
-        ${s.icono}
+        ${iconoRenderizado}
       </div>
       <h3 class="service-title">${s.nombre}</h3>
       <p class="service-desc">${s.descripcion}</p>
       
       <div class="service-benefits">
-        ${s.beneficios.map(b => `
+        ${beneficiosList.map(b => `
           <div class="service-benefit-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>${b}</span>
@@ -324,7 +338,8 @@ function renderizarServicios(servicios, contenedorId) {
         </button>
       </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
 }
 
 /**
@@ -332,8 +347,20 @@ function renderizarServicios(servicios, contenedorId) {
  * @param {number} idServicio - ID numérico del servicio
  */
 function mostrarDetalleServicio(idServicio) {
-  const servicio = SERVICIOS_DATA.find(s => s.id === idServicio);
+  const listaServicios = Array.isArray(window.SERVICIOS_DATA) ? window.SERVICIOS_DATA : SERVICIOS_DATA;
+  const servicio = listaServicios.find(s => Number(s.id) === Number(idServicio));
   if (!servicio) return;
+
+  window._servicioModalAbiertoId = Number(servicio.id);
+
+  const equipos = servicio.equipos_compatibles || servicio.equiposCompatibles || 'Portátiles y computadores de escritorio';
+  const tareasRaw = Array.isArray(servicio.tareas_incluidas) && servicio.tareas_incluidas.length > 0
+    ? servicio.tareas_incluidas
+    : (Array.isArray(servicio.tareasIncluidas) && servicio.tareasIncluidas.length > 0
+        ? servicio.tareasIncluidas
+        : (Array.isArray(servicio.beneficios) ? servicio.beneficios : []));
+  const tiempo = servicio.tiempo_estimado || servicio.tiempoEstimado || 'A convenir';
+  const precio = servicio.precio_referencia || servicio.precioReferencia || 'Cotizar por WhatsApp';
 
   const bodyHtml = `
     <div class="service-modal-content">
@@ -341,12 +368,12 @@ function mostrarDetalleServicio(idServicio) {
       
       <div style="background-color: var(--color-bg-secondary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; border: 1px solid var(--color-border);">
         <strong style="color: var(--color-text-primary); display: block; margin-bottom: 0.25rem;">Equipos y marcas compatibles:</strong>
-        <span class="text-sm text-muted">${servicio.equiposCompatibles}</span>
+        <span class="text-sm text-muted">${equipos}</span>
       </div>
 
       <h4 style="margin-bottom: 0.75rem;">¿Qué incluye este servicio técnico?</h4>
       <ul style="list-style: none; padding-left: 0; margin-bottom: 1.25rem;">
-        ${servicio.tareasIncluidas.map(t => `
+        ${tareasRaw.map(t => `
           <li style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.925rem; color: var(--color-text-secondary);">
             <svg style="width: 16px; height: 16px; color: var(--color-success); flex-shrink: 0; margin-top: 3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
             <span>${t}</span>
@@ -356,10 +383,10 @@ function mostrarDetalleServicio(idServicio) {
 
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-top: 1px solid var(--color-border); font-size: 0.9rem;">
         <div>
-          <span class="text-muted">Tiempo estimado:</span> <strong>${servicio.tiempoEstimado}</strong>
+          <span class="text-muted">Tiempo estimado:</span> <strong>${tiempo}</strong>
         </div>
         <div>
-          <span class="text-muted">Referencia:</span> <strong style="color: var(--color-primary);">${servicio.precioReferencia}</strong>
+          <span class="text-muted">Referencia:</span> <strong style="color: var(--color-primary);">${precio}</strong>
         </div>
       </div>
     </div>
@@ -468,9 +495,114 @@ function ejecutarDiagnostico(tipoProblema) {
   `;
 }
 
+/**
+ * Sincroniza dinámicamente los servicios técnicos desde la API de PostgreSQL si el servidor está activo
+ */
+async function sincronizarServiciosDesdeAPI() {
+  try {
+    const isLocalBackend = window.location.port === '3000' || window.location.origin.includes(':3000');
+    const apiBase = isLocalBackend ? '/api' : 'http://localhost:3000/api';
+    const res = await fetch(`${apiBase}/servicios?_t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.ok && Array.isArray(data.servicios) && data.servicios.length > 0) {
+        const serviciosNormalizados = data.servicios.map(s => {
+          const tareas = Array.isArray(s.tareas_incluidas)
+            ? s.tareas_incluidas
+            : (Array.isArray(s.tareasIncluidas) ? s.tareasIncluidas : []);
+          const beneficios = (Array.isArray(s.beneficios) && s.beneficios.length > 0)
+            ? s.beneficios
+            : tareas.slice(0, 3);
+          return {
+            ...s,
+            beneficios,
+            tareas_incluidas: tareas,
+            tareasIncluidas: tareas,
+            equipos_compatibles: s.equipos_compatibles || s.equiposCompatibles || 'Portátiles y computadores de escritorio',
+            equiposCompatibles: s.equipos_compatibles || s.equiposCompatibles || 'Portátiles y computadores de escritorio',
+            tiempo_estimado: s.tiempo_estimado || s.tiempoEstimado || 'A convenir',
+            tiempoEstimado: s.tiempo_estimado || s.tiempoEstimado || 'A convenir',
+            precio_referencia: s.precio_referencia || s.precioReferencia || 'Cotizar por WhatsApp',
+            precioReferencia: s.precio_referencia || s.precioReferencia || 'Cotizar por WhatsApp',
+          };
+        });
+
+        SERVICIOS_DATA = serviciosNormalizados;
+        window.SERVICIOS_DATA = serviciosNormalizados;
+
+        // Actualizar contador del botón "Todos los servicios (N)" si existe
+        const btnTodos = document.querySelector('.service-filter-btn[data-category="todos"]');
+        if (btnTodos) {
+          btnTodos.textContent = `Todos los servicios (${serviciosNormalizados.length})`;
+        }
+
+        // 1. Si estamos en servicios.html (grilla con filtros de categoría)
+        const gridServicios = document.getElementById('todos-servicios-container');
+        if (gridServicios && typeof renderizarServicios === 'function') {
+          const activeBtn = document.querySelector('.service-filter-btn.active');
+          const cat = activeBtn ? (activeBtn.dataset.category || 'todos') : 'todos';
+          const aMostrar = (cat === 'todos')
+            ? window.SERVICIOS_DATA
+            : window.SERVICIOS_DATA.filter(s => s.categoria === cat);
+          renderizarServicios(aMostrar, 'todos-servicios-container');
+        }
+
+        // 2. Si estamos en index.html (sección de servicios destacados)
+        const gridDestacados = document.getElementById('servicios-destacados-container');
+        if (gridDestacados && typeof renderizarServicios === 'function') {
+          const destacados = window.SERVICIOS_DATA.filter(s => s.destacado);
+          renderizarServicios(destacados.length > 0 ? destacados.slice(0, 4) : window.SERVICIOS_DATA.slice(0, 4), 'servicios-destacados-container');
+        }
+
+        // 3. Si el modal de detalle de un servicio está abierto actualmente, refrescarlo en vivo
+        const modalBackdrop = document.getElementById('app-modal-backdrop');
+        if (modalBackdrop && modalBackdrop.classList.contains('active') && window._servicioModalAbiertoId) {
+          mostrarDetalleServicio(window._servicioModalAbiertoId);
+        }
+      }
+    }
+  } catch (e) {
+    // Continuar con SERVICIOS_DATA estático
+  }
+}
+
+// Inicialización y reactividad automática
+document.addEventListener('DOMContentLoaded', sincronizarServiciosDesdeAPI);
+
+// Reactividad al volver a la pestaña
+window.addEventListener('focus', sincronizarServiciosDesdeAPI);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    sincronizarServiciosDesdeAPI();
+  }
+});
+
+// Reactividad entre pestañas
+if (typeof window.BroadcastChannel === 'function') {
+  try {
+    const canalCatalogo = new BroadcastChannel('tecnofix_catalog_channel');
+    canalCatalogo.onmessage = (e) => {
+      if (e.data && (e.data.type === 'servicios' || e.data.type === 'todos')) {
+        sincronizarServiciosDesdeAPI();
+      }
+    };
+  } catch (err) {}
+}
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'tecnofix_catalog_updated') {
+    sincronizarServiciosDesdeAPI();
+  }
+});
+
 // Exponer en el objeto global
 window.SERVICIOS_DATA = SERVICIOS_DATA;
 window.GUIA_DIAGNOSTICO = GUIA_DIAGNOSTICO;
 window.renderizarServicios = renderizarServicios;
 window.mostrarDetalleServicio = mostrarDetalleServicio;
 window.ejecutarDiagnostico = ejecutarDiagnostico;
+window.sincronizarServiciosDesdeAPI = sincronizarServiciosDesdeAPI;

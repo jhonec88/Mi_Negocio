@@ -405,7 +405,7 @@ function finalizarPedidoWhatsApp() {
     ? window.formatearPrecioCOP(total) 
     : `$ ${total.toLocaleString("es-CO")} COP`;
 
-  let mensaje = `Hola ${window.WHATSAPP_CONFIG?.businessName || "TecnoFix Colombia"}, deseo realizar el siguiente pedido desde el carrito de compras de su tienda web:\n\n` +
+  let mensaje = `Hola ${window.WHATSAPP_CONFIG?.businessName || "JecTech Soluciones"}, deseo realizar el siguiente pedido desde el carrito de compras de su tienda web:\n\n` +
     `🛒 *DETALLE DEL PEDIDO (${articulos} productos):*\n`;
 
   carrito.forEach((item, index) => {

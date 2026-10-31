@@ -14,7 +14,7 @@
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://tecnofix.com.co/assets/images/productos/placeholder-tech.svg</image:loc>
-      <image:title>TecnoFix Colombia - Servicio Técnico Especializado de Computadores</image:title>
+      <image:title>JecTech Soluciones - Servicio Técnico Especializado de Computadores en Anorí, Antioquia</image:title>
     </image:image>
   </url>
 
@@ -70,11 +70,11 @@
     <priority>0.7</priority>
     <image:image>
       <image:loc>https://tecnofix.com.co/assets/images/galeria/taller-2.svg</image:loc>
-      <image:title>Equipo Técnico y Taller de TecnoFix Colombia</image:title>
+      <image:title>Equipo Técnico y Taller de JecTech Soluciones</image:title>
     </image:image>
   </url>
 
-  <!-- 6. Contacto y Localización Bogotá -->
+  <!-- 6. Contacto y Localización Anorí, Antioquia -->
   <url>
     <loc>https://tecnofix.com.co/contacto.html</loc>
     <xhtml:link rel="alternate" hreflang="es-CO" href="https://tecnofix.com.co/contacto.html" />
