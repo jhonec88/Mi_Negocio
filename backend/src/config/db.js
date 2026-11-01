@@ -1,8 +1,11 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Cargar explícitamente el archivo .env de backend con override: true para ignorar variables de entorno del sistema
-dotenv.config({ path: path.resolve(__dirname, '../../.env'), override: true });
+// Cargar variables de entorno locales si existe el archivo .env
+const envFile = path.resolve(__dirname, '../../.env');
+if (require('fs').existsSync(envFile)) {
+  dotenv.config({ path: envFile });
+}
 
 const { Pool } = require('pg');
 

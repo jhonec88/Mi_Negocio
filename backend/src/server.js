@@ -2,8 +2,11 @@ const path = require('path');
 const { execSync } = require('child_process');
 const dotenv = require('dotenv');
 
-// Cargar variables de entorno
-dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true });
+// Cargar variables de entorno locales si existe el archivo .env (en producción / Render vienen directamente en process.env)
+const envFile = path.resolve(__dirname, '../.env');
+if (require('fs').existsSync(envFile)) {
+  dotenv.config({ path: envFile });
+}
 
 const express = require('express');
 const cors = require('cors');

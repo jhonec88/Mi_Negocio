@@ -1,8 +1,11 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Cargar explícitamente variables de entorno
-dotenv.config({ path: path.resolve(__dirname, '../../.env'), override: true });
+// Cargar variables de entorno locales si existe el archivo .env
+const envFile = path.resolve(__dirname, '../../.env');
+if (require('fs').existsSync(envFile)) {
+  dotenv.config({ path: envFile });
+}
 
 const { createClient } = require('@supabase/supabase-js');
 
