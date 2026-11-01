@@ -273,8 +273,8 @@ async function sincronizarConfiguracionDesdeAPI() {
 
   // 2. Consultar versión fresca desde el backend
   try {
-    const isLocalBackend = window.location.port === '3000' || window.location.origin.includes(':3000');
-    const apiBase = isLocalBackend ? '/api' : 'http://localhost:3000/api';
+    const isDifferentDevPort = window.location.hostname === 'localhost' && window.location.port !== '3000' && window.location.port !== '';
+    const apiBase = window.JECTECH_API_URL || (isDifferentDevPort ? 'http://localhost:3000/api' : '/api');
     const res = await fetch(`${apiBase}/config?_t=${Date.now()}`, {
       cache: 'no-store',
       headers: { 'Accept': 'application/json' }
