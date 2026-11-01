@@ -9,9 +9,9 @@ if (require('fs').existsSync(envFile)) {
 
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = (process.env.SUPABASE_URL || '').trim().replace(/^["']|["']$/g, '');
+const supabaseAnonKey = (process.env.SUPABASE_ANON_KEY || '').trim().replace(/^["']|["']$/g, '');
+const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim().replace(/^["']|["']$/g, '');
 
 // Cliente público / anónimo para operaciones de autenticación de usuario
 let supabase = null;
@@ -35,4 +35,3 @@ module.exports = {
   supabaseAdmin,
   isConfigured: () => Boolean(supabaseUrl && (supabaseAnonKey || supabaseServiceKey)),
 };
-

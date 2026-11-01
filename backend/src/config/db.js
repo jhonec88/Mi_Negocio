@@ -12,13 +12,15 @@ const { Pool } = require('pg');
 const poolConfig = {
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 10000,
 };
 
-if (process.env.DATABASE_URL) {
-  poolConfig.connectionString = process.env.DATABASE_URL;
+const rawDbUrl = (process.env.DATABASE_URL || '').trim().replace(/^["']|["']$/g, '');
+
+if (rawDbUrl) {
+  poolConfig.connectionString = rawDbUrl;
   // Supabase y proveedores cloud requieren SSL
-  if (process.env.DATABASE_URL.includes('supabase') || process.env.DB_SSL === 'true') {
+  if (rawDbUrl.includes('supabase') || rawDbUrl.includes('pooler') || process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production') {
     poolConfig.ssl = { rejectUnauthorized: false };
   }
 } else {

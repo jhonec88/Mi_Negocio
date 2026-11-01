@@ -89,16 +89,28 @@ app.use('/api', apiRoutes);
 
 // Endpoint de diagnóstico de salud (Healthcheck)
 app.get('/api/health', async (req, res) => {
+  const hasDbUrl = Boolean(process.env.DATABASE_URL);
+  let dbTarget = 'No definida (fallback local)';
+  if (hasDbUrl) {
+    try {
+      const parts = process.env.DATABASE_URL.split('@');
+      dbTarget = parts.length > 1 ? parts[1].split('/')[0] : 'URL presente (formato personalizado)';
+    } catch (_) {
+      dbTarget = 'Error parseando URL';
+    }
+  }
+
   try {
     const dbTest = await pool.query('SELECT NOW() as db_time');
-    const dbType = process.env.DATABASE_URL && process.env.DATABASE_URL.includes('supabase')
-      ? 'Supabase PostgreSQL Cloud conectada'
-      : (process.env.DATABASE_URL ? 'PostgreSQL Cloud conectada' : 'PostgreSQL Dockerizada conectada');
     res.json({
       ok: true,
       servicio: 'JecTech Soluciones Backend API & Consola Admin',
       estado: 'online',
-      base_de_datos: dbType,
+      base_de_datos: hasDbUrl ? 'Supabase PostgreSQL Cloud conectada' : 'PostgreSQL Local',
+      servidor_bd: dbTarget,
+      hasDatabaseUrl: hasDbUrl,
+      hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+      hasJwtSecret: Boolean(process.env.JWT_SECRET),
       timestamp: dbTest.rows[0].db_time,
     });
   } catch (err) {
@@ -106,7 +118,11 @@ app.get('/api/health', async (req, res) => {
       ok: false,
       servicio: 'JecTech Soluciones Backend API',
       estado: 'degraded',
-      error: err.message,
+      servidor_bd: dbTarget,
+      hasDatabaseUrl: hasDbUrl,
+      hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+      hasJwtSecret: Boolean(process.env.JWT_SECRET),
+      error: String(err.message || err.code || err || 'Error desconocido al conectar a la BD'),
     });
   }
 });

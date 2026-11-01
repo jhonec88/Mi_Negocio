@@ -126,9 +126,12 @@ const login = async (req, res, next) => {
     });
   } catch (error) {
     console.error('[Error en Login]:', error);
+    const msg = error.code === 'ECONNREFUSED'
+      ? 'No se pudo conectar a la base de datos (ECONNREFUSED). Falta configurar DATABASE_URL en Render.'
+      : 'Error interno en el servidor de autenticación: ' + (error.message || error.code || 'Error de conexión');
     return res.status(500).json({
       ok: false,
-      mensaje: 'Error interno en el servidor de autenticación: ' + error.message,
+      mensaje: msg,
     });
   }
 };
