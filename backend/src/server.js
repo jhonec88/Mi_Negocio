@@ -21,6 +21,9 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Confianza en proxies inversos (Render / Cloudflare / Heroku) para SSL y cabeceras X-Forwarded-*
+app.set('trust proxy', 1);
+
 // ============================================================================
 // 1. MIDDLEWARES DE SEGURIDAD Y CONFIGURACIÓN
 // ============================================================================
@@ -45,8 +48,8 @@ app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 // Limitador de tasa contra ataques de fuerza bruta en autenticación y spam
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 30, // máximo 30 intentos por IP
-  message: { ok: false, mensaje: 'Demasiados intentos. Por favor espera 15 minutos.' },
+  max: 100, // suficiente para trabajo administrativo continuo
+  message: { ok: false, mensaje: 'Demasiados intentos. Por favor espera unos minutos.' },
   standardHeaders: true,
   legacyHeaders: false,
 });

@@ -41,8 +41,12 @@ const requerirAuth = async (req, res, next) => {
       });
     }
 
-    // A. Si Supabase está configurado, intentar verificar token con Supabase Auth
-    if (isSupabaseConfigured() && supabaseAdmin) {
+    // Inspeccionar payload para decidir si validar con Supabase Auth o JWT local inmediatamente
+    const decodedRaw = jwt.decode(token);
+    const isSupabaseToken = Boolean(decodedRaw && decodedRaw.iss && decodedRaw.iss.includes('supabase'));
+
+    // A. Si es un token emitido por Supabase Auth
+    if (isSupabaseToken && isSupabaseConfigured() && supabaseAdmin) {
       try {
         const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
         if (!authError && user) {
@@ -61,7 +65,7 @@ const requerirAuth = async (req, res, next) => {
       }
     }
 
-    // B. Validación con JWT local
+    // B. Validación con JWT local (instantánea sin llamadas externas)
     const decoded = jwt.verify(token, JWT_SECRET);
 
     // Verificar que el usuario continúe existiendo y activo en la base de datos

@@ -156,13 +156,18 @@ function mostrarVistaLogin() {
 }
 
 function mostrarVistaConsola() {
-  document.getElementById('login-view').style.display = 'none';
-  document.getElementById('admin-app').style.display = 'flex';
+  const loginView = document.getElementById('login-view');
+  const adminApp = document.getElementById('admin-app');
+  if (loginView) loginView.style.display = 'none';
+  if (adminApp) adminApp.style.display = 'flex';
 
   if (state.usuario) {
-    document.getElementById('sidebar-user-name').textContent = state.usuario.nombre;
-    document.getElementById('sidebar-user-email').textContent = state.usuario.email;
-    document.getElementById('sidebar-user-avatar').textContent = (state.usuario.nombre || 'A').charAt(0).toUpperCase();
+    const nameEl = document.getElementById('sidebar-user-name');
+    const emailEl = document.getElementById('sidebar-user-email');
+    const avatarEl = document.getElementById('sidebar-user-avatar');
+    if (nameEl) nameEl.textContent = state.usuario.nombre || 'Administrador';
+    if (emailEl) emailEl.textContent = state.usuario.email || '';
+    if (avatarEl) avatarEl.textContent = (state.usuario.nombre || 'A').charAt(0).toUpperCase();
   }
 }
 
@@ -189,7 +194,13 @@ async function handleLoginSubmit(e) {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await res.json();
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (_) {
+      data = { ok: false, mensaje: `El servidor respondió con código HTTP ${res.status}.` };
+    }
+
     if (!res.ok || !data.ok) {
       throw new Error(data.mensaje || 'Credenciales inválidas');
     }
