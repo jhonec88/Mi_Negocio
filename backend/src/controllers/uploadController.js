@@ -45,8 +45,8 @@ exports.uploadImage = async (req, res, next) => {
       });
     }
 
-    // Carpeta de almacenamiento: assets/images/uploads
-    const uploadsDir = path.resolve(__dirname, '../../../assets/images/uploads');
+    // Carpeta de almacenamiento: frontend/assets/images/uploads
+    const uploadsDir = path.resolve(__dirname, '../../../frontend/assets/images/uploads');
     if (!fs.existsSync(uploadsDir)) {
       fs.mkdirSync(uploadsDir, { recursive: true });
     }

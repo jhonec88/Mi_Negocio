@@ -1,4 +1,5 @@
 const path = require('path');
+const { execSync } = require('child_process');
 const dotenv = require('dotenv');
 
 // Cargar variables de entorno
@@ -84,11 +85,14 @@ app.use('/api', apiRoutes);
 app.get('/api/health', async (req, res) => {
   try {
     const dbTest = await pool.query('SELECT NOW() as db_time');
+    const dbType = process.env.DATABASE_URL && process.env.DATABASE_URL.includes('supabase')
+      ? 'Supabase PostgreSQL Cloud conectada'
+      : (process.env.DATABASE_URL ? 'PostgreSQL Cloud conectada' : 'PostgreSQL Dockerizada conectada');
     res.json({
       ok: true,
       servicio: 'JecTech Soluciones Backend API & Consola Admin',
       estado: 'online',
-      base_de_datos: 'PostgreSQL Dockerizada conectada',
+      base_de_datos: dbType,
       timestamp: dbTest.rows[0].db_time,
     });
   } catch (err) {
@@ -104,8 +108,8 @@ app.get('/api/health', async (req, res) => {
 // ============================================================================
 // 4. SERVIR EL FRONTEND PÚBLICO (TIENDA Y SERVICIOS)
 // ============================================================================
-// Sirve todo el frontend estático existente (index.html, servicios.html, assets, etc.)
-const publicRoot = path.join(__dirname, '../../');
+// Sirve todo el frontend estático existente desde la carpeta /frontend
+const publicRoot = path.join(__dirname, '../../frontend');
 app.use(express.static(publicRoot));
 
 // ============================================================================
@@ -113,24 +117,50 @@ app.use(express.static(publicRoot));
 // ============================================================================
 app.use(errorHandler);
 
-// Iniciar servidor HTTP
-const server = app.listen(PORT, () => {
-  console.log('================================================================');
-  console.log(`🚀 SERVIDOR JECTECH SOLUCIONES BACKEND INICIADO`);
-  console.log(`📍 URL Pública / Tienda:      http://localhost:${PORT}/`);
-  console.log(`🛡️  Consola Administrativa:    http://localhost:${PORT}/consola`);
-  console.log(`🔌 API REST Endpoints:       http://localhost:${PORT}/api/`);
-  console.log(`🐘 Base de Datos:            PostgreSQL Dockerizada (Puerto 5432)`);
-  console.log('================================================================');
-});
-
-// Cierre ordenado
-process.on('SIGTERM', async () => {
-  console.log('Cerrando servidor HTTP y conexiones de base de datos...');
-  server.close(async () => {
-    await pool.end();
-    console.log('Servidor finalizado limpiamente.');
+// Iniciar servidor HTTP con liberación automática si el puerto quedó ocupado por una sesión previa
+function iniciarServidor(reintento = false) {
+  const server = app.listen(PORT, () => {
+    console.log('================================================================');
+    console.log(`🚀 SERVIDOR JECTECH SOLUCIONES BACKEND INICIADO`);
+    console.log(`📍 URL Pública / Tienda:      http://localhost:${PORT}/`);
+    console.log(`🛡️  Consola Administrativa:    http://localhost:${PORT}/consola`);
+    console.log(`🔌 API REST Endpoints:       http://localhost:${PORT}/api/`);
+    console.log(`🐘 Base de Datos:            PostgreSQL Dockerizada (Puerto 5432)`);
+    console.log('================================================================');
   });
-});
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE' && !reintento) {
+      console.log(`⚠️  El puerto ${PORT} estaba ocupado por una instancia previa. Liberando puerto y reiniciando...`);
+      try {
+        if (process.platform === 'win32') {
+          execSync(
+            `powershell -NoProfile -Command "$conns = Get-NetTCPConnection -LocalPort ${PORT} -State Listen -ErrorAction SilentlyContinue; foreach ($c in $conns) { if ($c.OwningProcess -ne ${process.pid}) { Stop-Process -Id $c.OwningProcess -Force -ErrorAction SilentlyContinue } }"`,
+            { stdio: 'ignore' }
+          );
+        } else {
+          execSync(`fuser -k ${PORT}/tcp`, { stdio: 'ignore' });
+        }
+      } catch (_) {
+        // Ignorar si el proceso ya se cerró
+      }
+      setTimeout(() => iniciarServidor(true), 600);
+    } else {
+      console.error('❌ Error al iniciar el servidor:', err.message);
+      process.exit(1);
+    }
+  });
+
+  // Cierre ordenado
+  process.on('SIGTERM', async () => {
+    console.log('Cerrando servidor HTTP y conexiones de base de datos...');
+    server.close(async () => {
+      await pool.end();
+      console.log('Servidor finalizado limpiamente.');
+    });
+  });
+}
+
+iniciarServidor();
 
 module.exports = app;

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { query } = require('../config/db');
 const { generarToken } = require('../middleware/auth');
+const { supabase, isConfigured: isSupabaseConfigured } = require('../config/supabase');
 
 /**
  * Iniciar sesión de usuario administrador
@@ -17,6 +18,44 @@ const login = async (req, res, next) => {
       });
     }
 
+    // 1. Si Supabase Auth está configurado, intentar autenticar con Supabase primero
+    if (isSupabaseConfigured() && supabase) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+
+        if (!error && data?.session && data?.user) {
+          const token = data.session.access_token;
+
+          // Configurar cookie httpOnly
+          res.cookie('tecnofix_admin_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+
+          return res.json({
+            ok: true,
+            mensaje: `¡Bienvenido a la consola administrativa!`,
+            token,
+            usuario: {
+              id: data.user.id,
+              nombre: data.user.user_metadata?.nombre || data.user.email.split('@')[0],
+              email: data.user.email,
+              rol: data.user.app_metadata?.role || 'admin',
+              auth_provider: 'supabase',
+            },
+          });
+        }
+      } catch (sbErr) {
+        // Si hay error en Supabase, continuar con fallback a tabla usuarios local
+      }
+    }
+
+    // 2. Fallback: Autenticación local mediante tabla usuarios
     const { rows } = await query(
       'SELECT id, nombre, email, password_hash, rol, activo FROM usuarios WHERE LOWER(email) = LOWER($1)',
       [email.trim()]

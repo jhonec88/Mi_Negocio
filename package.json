@@ -1,0 +1,13 @@
+{
+  "name": "jectech-soluciones",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proyecto JecTech Soluciones (Frontend + Backend API & Consola Admin)",
+  "main": "backend/src/server.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node --watch backend/src/server.js",
+    "seed": "node backend/src/db/seed.js"
+  }
+}
+

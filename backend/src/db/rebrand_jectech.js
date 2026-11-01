@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
 
-const rootDir = path.resolve(__dirname, '../../..');
+const rootDir = path.resolve(__dirname, '../../../frontend');
 dotenv.config({ path: path.resolve(__dirname, '../../.env'), override: true });
 
 const { pool } = require('../config/db');

@@ -1,4 +1,7 @@
 {
+  "installCommand": "echo 'Static frontend deployment'",
+  "buildCommand": null,
+  "outputDirectory": "frontend",
   "headers": [
     {
       "source": "/(.*)",

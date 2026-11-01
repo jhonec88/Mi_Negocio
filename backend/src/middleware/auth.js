@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/db');
+const { supabaseAdmin, isConfigured: isSupabaseConfigured } = require('../config/supabase');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tecnofix_jwt_super_secret_key_2026_bogota_colombia_9876543210';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 /**
- * Genera un token JWT firmado
+ * Genera un token JWT firmado (modo local)
  * @param {object} payload
  * @returns {string}
  */
@@ -15,6 +16,9 @@ const generarToken = (payload) => {
 
 /**
  * Middleware para proteger rutas que requieren autenticación de administrador
+ * Compatible con:
+ * 1. Supabase Auth (Bearer Token verificado con supabase.auth.getUser)
+ * 2. JWT firmado localmente
  */
 const requerirAuth = async (req, res, next) => {
   try {
@@ -37,7 +41,27 @@ const requerirAuth = async (req, res, next) => {
       });
     }
 
-    // Verificar firma del token
+    // A. Si Supabase está configurado, intentar verificar token con Supabase Auth
+    if (isSupabaseConfigured() && supabaseAdmin) {
+      try {
+        const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+        if (!authError && user) {
+          req.usuario = {
+            id: user.id,
+            nombre: user.user_metadata?.nombre || user.email.split('@')[0],
+            email: user.email,
+            rol: user.app_metadata?.role || 'admin',
+            activo: true,
+            auth_provider: 'supabase',
+          };
+          return next();
+        }
+      } catch (sbErr) {
+        // Fallback a validación JWT estándar
+      }
+    }
+
+    // B. Validación con JWT local
     const decoded = jwt.verify(token, JWT_SECRET);
 
     // Verificar que el usuario continúe existiendo y activo en la base de datos
