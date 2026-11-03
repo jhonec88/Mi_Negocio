@@ -349,13 +349,10 @@ window.addEventListener('storage', (e) => {
 });
 
 // Interceptar todos los enlaces y botones directos de WhatsApp (header, botón flotante, enlaces wa.me)
-// a excepción del carrito de compras (#cart-drawer-backdrop) para abrir el modal de solicitud
+// para abrir el modal de solicitud
 document.addEventListener('click', (e) => {
   const trigger = e.target.closest('.btn-whatsapp-header, .whatsapp-float, a[href*="wa.me/"], a[href*="whatsapp.com"]');
   if (!trigger) return;
-
-  // Excluir cualquier botón dentro del drawer del carrito de compras
-  if (trigger.closest('#cart-drawer-backdrop')) return;
 
   e.preventDefault();
   e.stopPropagation();

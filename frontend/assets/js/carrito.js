@@ -394,7 +394,8 @@ function renderizarCarritoDrawer() {
 }
 
 /**
- * Prepara el mensaje de compra estructurado y abre WhatsApp
+ * Prepara el mensaje de compra estructurado y abre el modal del Formulario de Solicitud
+ * precargando el detalle del pedido en "Detalles de tu computador o requerimiento"
  */
 function finalizarPedidoWhatsApp() {
   const carrito = obtenerCarrito();
@@ -406,25 +407,28 @@ function finalizarPedidoWhatsApp() {
     : `$ ${total.toLocaleString("es-CO")} COP`;
 
   let mensaje = `Hola ${window.WHATSAPP_CONFIG?.businessName || "JecTech Soluciones"}, deseo realizar el siguiente pedido desde el carrito de compras de su tienda web:\n\n` +
-    `🛒 *DETALLE DEL PEDIDO (${articulos} productos):*\n`;
+    `🛒 DETALLE DEL PEDIDO (${articulos} productos):\n`;
 
   carrito.forEach((item, index) => {
     const subtotalItem = typeof window.formatearPrecioCOP === "function" 
       ? window.formatearPrecioCOP(item.precio * item.cantidad) 
       : `$ ${(item.precio * item.cantidad).toLocaleString("es-CO")} COP`;
     
-    mensaje += `\n${index + 1}. *${item.nombre}*` +
+    mensaje += `\n${index + 1}. ${item.nombre}` +
       `\n   • Cantidad: ${item.cantidad} unidad(es)` +
       `\n   • Subtotal: ${subtotalItem}\n`;
   });
 
-  mensaje += `\n💰 *TOTAL ESTIMADO:* ${totalFormateado}\n\n` +
+  mensaje += `\n💰 TOTAL ESTIMADO: ${totalFormateado}\n\n` +
     `¿Me pueden confirmar disponibilidad inmediata de estos productos y el costo del despacho hasta mi ubicación?`;
 
-  if (typeof window.abrirWhatsAppDirecto === "function") {
-    window.abrirWhatsAppDirecto(mensaje);
+  // Cerrar el panel lateral del carrito antes de abrir el modal del formulario
+  cerrarCarrito();
+
+  if (typeof window.abrirModalSolicitudWhatsApp === "function") {
+    window.abrirModalSolicitudWhatsApp(mensaje, "producto");
   } else if (typeof window.contactarWhatsApp === "function") {
-    window.contactarWhatsApp(mensaje, { directo: true });
+    window.contactarWhatsApp(mensaje, { tipo: "producto" });
   }
 }
 

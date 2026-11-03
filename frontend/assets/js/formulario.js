@@ -232,7 +232,7 @@ function vincularValidacionYEnvioFormulario(formEl, Ids, esModal = false) {
       }
     }
 
-    // 5. Descripción detallada (Obligatorio, 10 - 1000 caracteres)
+    // 5. Descripción detallada (Obligatorio, 10 - 2000 caracteres)
     const descTextarea = formEl.querySelector(Ids.mensaje);
     if (descTextarea) {
       const descVal = descTextarea.value.trim();
@@ -244,8 +244,8 @@ function vincularValidacionYEnvioFormulario(formEl, Ids, esModal = false) {
         setCampoError(descTextarea, "La descripción debe tener al menos 10 caracteres.");
         esValido = false;
         if (!primerElementoInvalido) primerElementoInvalido = descTextarea;
-      } else if (descVal.length > 1000) {
-        setCampoError(descTextarea, "La descripción no puede exceder los 1000 caracteres.");
+      } else if (descVal.length > 2000) {
+        setCampoError(descTextarea, "La descripción no puede exceder los 2000 caracteres.");
         esValido = false;
         if (!primerElementoInvalido) primerElementoInvalido = descTextarea;
       }
@@ -277,7 +277,7 @@ function vincularValidacionYEnvioFormulario(formEl, Ids, esModal = false) {
     const tel = sanitizar(telInput.value, 20);
     const email = emailInput && emailInput.value.trim() ? sanitizar(emailInput.value, 100) : "No especificado";
     const tipo = tipoSelect ? sanitizar(tipoSelect.options[tipoSelect.selectedIndex].text, 100) : "Servicio General";
-    const mensajeDesc = sanitizar(descTextarea.value, 1000);
+    const mensajeDesc = sanitizar(descTextarea.value, 2000);
 
     const mensajeWhatsApp =
       `Hola ${window.WHATSAPP_CONFIG?.businessName || "JecTech Soluciones"}, deseo radicar la siguiente consulta desde la web:\n\n` +
@@ -454,7 +454,7 @@ function abrirModalSolicitudWhatsApp(mensajeAutomatico = "", tipoSugerido = "") 
             <span>Detalles de tu computador o requerimiento</span>
             <span class="form-required" aria-hidden="true">*</span>
           </label>
-          <textarea id="modal-contacto-mensaje" class="form-textarea" placeholder="Indica marca, modelo aproximado y qué síntomas presenta el equipo..." maxlength="1000" style="min-height: 110px;" required></textarea>
+          <textarea id="modal-contacto-mensaje" class="form-textarea" placeholder="Indica marca, modelo aproximado y qué síntomas presenta el equipo..." maxlength="2000" style="min-height: 110px;" required></textarea>
           <span class="form-error-msg" role="alert"></span>
         </div>
 
