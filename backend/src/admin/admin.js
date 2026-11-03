@@ -1605,8 +1605,38 @@ function inicializarGestorSubidaImagenes() {
   });
 }
 
+/**
+ * Inicializa los botones de mostrar/ocultar contraseña (password toggle)
+ */
+function inicializarTogglePassword() {
+  document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      if (!input) return;
+
+      const mostrarTexto = input.type === 'password';
+      input.type = mostrarTexto ? 'text' : 'password';
+
+      const iconEye = btn.querySelector('.icon-eye');
+      const iconEyeOff = btn.querySelector('.icon-eye-off');
+      if (iconEye && iconEyeOff) {
+        iconEye.style.display = mostrarTexto ? 'none' : 'block';
+        iconEyeOff.style.display = mostrarTexto ? 'block' : 'none';
+      }
+
+      const label = mostrarTexto ? 'Ocultar contraseña' : 'Mostrar contraseña';
+      btn.setAttribute('title', label);
+      btn.setAttribute('aria-label', label);
+    });
+  });
+}
+
 // Inicialización de escuchadores de eventos al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
+  // Inicializar botones de visibilidad de contraseña
+  inicializarTogglePassword();
+
   // Inicializar subida de imágenes desde dispositivo
   inicializarGestorSubidaImagenes();
   // Login submit

@@ -584,6 +584,45 @@ body {
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
 }
 
+/* BOTÓN DE VISIBILIDAD DE CONTRASEÑA (PASSWORD TOGGLE) */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-wrapper .form-control.password-field {
+  padding-right: 2.75rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.password-toggle-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  color: var(--text-main);
+}
+
 textarea.form-control {
   min-height: 90px;
   resize: vertical;
