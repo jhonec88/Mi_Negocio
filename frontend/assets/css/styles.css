@@ -3411,8 +3411,8 @@ p:last-child {
    LOGOTIPO OFICIAL JECTECH SOLUCIONES
    ========================================================================== */
 .brand-icon {
-  width: 50px !important;
-  height: 50px !important;
+  width: 54px !important;
+  height: 54px !important;
   background: transparent !important;
   box-shadow: none !important;
   padding: 0 !important;
@@ -3427,4 +3427,11 @@ p:last-child {
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+[data-theme="dark"] .brand-icon img,
+[data-theme="dark"] .brand-logo-img,
+.site-footer .brand-icon img,
+.site-footer .brand-logo-img {
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
 }
