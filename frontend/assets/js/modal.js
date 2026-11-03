@@ -72,9 +72,12 @@ function asegurarContenedorModal() {
  */
 function abrirModal(titulo, contenidoHtml, footerHtml = "") {
   const modalBackdrop = asegurarContenedorModal();
+  const yaEstabaAbierto = modalBackdrop.classList.contains("is-open");
   
   // Guardar el elemento con foco activo para restaurarlo al cerrar (WCAG 2.2)
-  elementoPrevioFoco = document.activeElement;
+  if (!yaEstabaAbierto) {
+    elementoPrevioFoco = document.activeElement;
+  }
 
   // Actualizar contenido
   const tituloEl = modalBackdrop.querySelector("#modal-title-text");
@@ -82,7 +85,10 @@ function abrirModal(titulo, contenidoHtml, footerHtml = "") {
   const footerEl = modalBackdrop.querySelector("#modal-footer-content");
 
   if (tituloEl) tituloEl.textContent = titulo;
-  if (cuerpoEl) cuerpoEl.innerHTML = contenidoHtml;
+  if (cuerpoEl) {
+    cuerpoEl.innerHTML = contenidoHtml;
+    cuerpoEl.scrollTop = 0;
+  }
   if (footerHtml && footerEl) {
     footerEl.innerHTML = footerHtml;
   } else if (footerEl) {
@@ -95,9 +101,10 @@ function abrirModal(titulo, contenidoHtml, footerHtml = "") {
   document.body.style.overflow = "hidden"; // Evita scroll de fondo
   modalActivo = modalBackdrop;
 
-  // Enfocar el botón de cerrar o primer elemento enfocable
+  // Enfocar el primer campo del formulario si existe, o el primer elemento enfocable
   setTimeout(() => {
-    const primerEnfocable = modalBackdrop.querySelector("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+    const primerInputCuerpo = cuerpoEl ? cuerpoEl.querySelector("input:not([type='hidden']):not([tabindex='-1']), select, textarea") : null;
+    const primerEnfocable = primerInputCuerpo || modalBackdrop.querySelector("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
     if (primerEnfocable) {
       primerEnfocable.focus();
     } else {

@@ -421,8 +421,10 @@ function finalizarPedidoWhatsApp() {
   mensaje += `\n💰 *TOTAL ESTIMADO:* ${totalFormateado}\n\n` +
     `¿Me pueden confirmar disponibilidad inmediata de estos productos y el costo del despacho hasta mi ubicación?`;
 
-  if (typeof window.contactarWhatsApp === "function") {
-    window.contactarWhatsApp(mensaje);
+  if (typeof window.abrirWhatsAppDirecto === "function") {
+    window.abrirWhatsAppDirecto(mensaje);
+  } else if (typeof window.contactarWhatsApp === "function") {
+    window.contactarWhatsApp(mensaje, { directo: true });
   }
 }
 

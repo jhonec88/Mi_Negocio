@@ -1725,6 +1725,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Verificar sesión existente
   verificarSesionInicial();
+
+  // Sincronización en tiempo real de nuevas solicitudes de WhatsApp/Contacto
+  if (typeof window.BroadcastChannel === 'function') {
+    try {
+      const canalAdmin = new BroadcastChannel('tecnofix_catalog_channel');
+      canalAdmin.onmessage = (e) => {
+        if (e.data && e.data.type === 'contacto' && state.token) {
+          cargarContacto();
+          cargarDashboard();
+        }
+      };
+    } catch (e) {}
+  }
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'tecnofix_contacto_updated' && state.token) {
+      cargarContacto();
+      cargarDashboard();
+    }
+  });
 });
 
 // Exponer funciones globales para interacción inline

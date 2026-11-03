@@ -13,11 +13,11 @@ const WHATSAPP_CONFIG = {
 };
 
 /**
- * Abre WhatsApp con un mensaje predefinido y codificado para URL.
- * Cumple con la especificación: solo abre WhatsApp, no afirma envío o almacenamiento en backend.
+ * Abre directamente la ventana/aplicación de WhatsApp con un mensaje codificado para URL.
+ * Se utiliza exclusivamente tras validar y registrar el formulario de solicitud o desde el carrito de compras.
  * @param {string} mensaje - Texto del mensaje que se precargará en la conversación.
  */
-function contactarWhatsApp(mensaje) {
+function abrirWhatsAppDirecto(mensaje) {
   if (!mensaje || typeof mensaje !== "string") {
     mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, deseo solicitar información sobre sus servicios técnicos y catálogo.`;
   }
@@ -41,37 +41,66 @@ function contactarWhatsApp(mensaje) {
 }
 
 /**
- * Genera el mensaje contextual para cotizar o solicitar un servicio técnico.
+ * Abre el modal con el Formulario de Solicitud precargando el mensaje automático
+ * en el campo "Detalles de tu computador o requerimiento", salvo que se indique apertura directa.
+ * @param {string} mensaje - Texto del mensaje automático.
+ * @param {Object} [opciones] - { directo: boolean, tipo: string }
+ */
+function contactarWhatsApp(mensaje, opciones = {}) {
+  if (!mensaje || typeof mensaje !== "string") {
+    mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, deseo solicitar información sobre sus servicios técnicos y catálogo.`;
+  }
+
+  if (opciones && opciones.directo === true) {
+    abrirWhatsAppDirecto(mensaje);
+    return;
+  }
+
+  if (typeof window.abrirModalSolicitudWhatsApp === "function") {
+    window.abrirModalSolicitudWhatsApp(mensaje, opciones?.tipo || "");
+  } else {
+    abrirWhatsAppDirecto(mensaje);
+  }
+}
+
+/**
+ * Genera el mensaje contextual para cotizar o solicitar un servicio técnico
+ * y abre el modal del Formulario de Solicitud con dicho mensaje precargado.
  * @param {string} nombreServicio - Nombre del servicio técnico.
  * @param {string} [detallesExtra] - Detalles adicionales del equipo o falla.
  */
 function solicitarServicioWhatsApp(nombreServicio, detallesExtra = "") {
-  let mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, necesito solicitar el servicio de *${nombreServicio}* para mi equipo.`;
+  let mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, necesito solicitar el servicio de ${nombreServicio} para mi equipo.`;
   if (detallesExtra) {
-    mensaje += `\n\n*Detalles del equipo/falla:* ${detallesExtra}`;
+    mensaje += `\n\nDetalles del equipo/falla: ${detallesExtra}`;
   }
   mensaje += `\nQuisiera conocer el procedimiento, tiempos estimados y costo aproximado.`;
   
-  contactarWhatsApp(mensaje);
+  const tipoSugerido = (typeof window.inferirTipoSolicitud === "function")
+    ? window.inferirTipoSolicitud(`${nombreServicio} ${detallesExtra}`)
+    : "";
+
+  contactarWhatsApp(mensaje, { tipo: tipoSugerido });
 }
 
 /**
- * Genera el mensaje contextual para consultar disponibilidad y precio de un producto.
+ * Genera el mensaje contextual para consultar disponibilidad y precio de un producto
+ * y abre el modal del Formulario de Solicitud con dicho mensaje precargado.
  * @param {string} nombreProducto - Nombre del producto en catálogo.
  * @param {string|number} precio - Precio en COP.
  * @param {string} [marca] - Marca del producto.
  */
 function consultarProductoWhatsApp(nombreProducto, precio, marca = "") {
-  let mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, estoy interesado en el producto: *${nombreProducto}*`;
+  let mensaje = `Hola ${WHATSAPP_CONFIG.businessName}, estoy interesado en el producto: ${nombreProducto}`;
   if (marca) {
     mensaje += ` (Marca: ${marca})`;
   }
   if (precio) {
-    mensaje += ` con precio de referencia de *${precio}*`;
+    mensaje += ` con precio de referencia de ${precio}`;
   }
   mensaje += ` que vi en su catálogo web.\n¿Me pueden confirmar disponibilidad inmediata y proceso de entrega?`;
   
-  contactarWhatsApp(mensaje);
+  contactarWhatsApp(mensaje, { tipo: "producto" });
 }
 
 // ============================================================================
@@ -319,8 +348,64 @@ window.addEventListener('storage', (e) => {
   }
 });
 
+// Interceptar todos los enlaces y botones directos de WhatsApp (header, botón flotante, enlaces wa.me)
+// a excepción del carrito de compras (#cart-drawer-backdrop) para abrir el modal de solicitud
+document.addEventListener('click', (e) => {
+  const trigger = e.target.closest('.btn-whatsapp-header, .whatsapp-float, a[href*="wa.me/"], a[href*="whatsapp.com"]');
+  if (!trigger) return;
+
+  // Excluir cualquier botón dentro del drawer del carrito de compras
+  if (trigger.closest('#cart-drawer-backdrop')) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Cerrar menú móvil si estuviera abierto
+  const mainNav = document.getElementById('main-nav');
+  const menuBtn = document.getElementById('menu-toggle');
+  if (mainNav && mainNav.classList.contains('is-open')) {
+    mainNav.classList.remove('is-open');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  let mensajeAutomatico = '';
+  let tipoSugerido = '';
+
+  try {
+    const href = trigger.getAttribute('href') || '';
+    if (href.includes('text=')) {
+      const urlObj = new URL(href.startsWith('http') ? href : `https://${href}`);
+      const textParam = urlObj.searchParams.get('text');
+      if (textParam) mensajeAutomatico = textParam;
+    }
+  } catch (err) {}
+
+  if (!mensajeAutomatico) {
+    const pagina = window.location.pathname.split('/').pop() || 'index.html';
+    const business = WHATSAPP_CONFIG.businessName || 'JecTech Soluciones';
+    if (pagina === 'productos.html') {
+      mensajeAutomatico = `Hola ${business}, deseo consultar disponibilidad y precios de productos de su catálogo tecnológico.`;
+      tipoSugerido = 'producto';
+    } else if (pagina === 'servicios.html') {
+      mensajeAutomatico = `Hola ${business}, deseo solicitar cotización para un servicio técnico o reparación de mi computador.`;
+    } else if (pagina === 'preguntas-frecuentes.html') {
+      mensajeAutomatico = `Hola ${business}, tengo una consulta técnica sobre sus servicios y catálogo de computadores.`;
+    } else if (pagina === 'nosotros.html') {
+      mensajeAutomatico = `Hola ${business}, deseo comunicarme con el laboratorio técnico para consultar por mi equipo.`;
+    } else if (pagina === 'contacto.html') {
+      mensajeAutomatico = `Hola ${business}, deseo atención directa desde la página de contacto para mi computador.`;
+    } else {
+      mensajeAutomatico = `Hola ${business}, deseo solicitar información sobre sus servicios técnicos y catálogo.`;
+    }
+  }
+
+  contactarWhatsApp(mensajeAutomatico, { tipo: tipoSugerido });
+});
+
 // Exponer en el objeto global para acceso directo desde HTML y otros módulos
 window.WHATSAPP_CONFIG = WHATSAPP_CONFIG;
+window.abrirWhatsAppDirecto = abrirWhatsAppDirecto;
 window.contactarWhatsApp = contactarWhatsApp;
 window.solicitarServicioWhatsApp = solicitarServicioWhatsApp;
 window.consultarProductoWhatsApp = consultarProductoWhatsApp;

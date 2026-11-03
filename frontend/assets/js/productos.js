@@ -207,7 +207,6 @@ function mostrarDetalleProducto(idProducto) {
         if (typeof window.consultarProductoWhatsApp === "function") {
           window.consultarProductoWhatsApp(p.nombre, precioFormateado, p.marca);
         }
-        cerrarModal();
       });
     }
   }, 50);
